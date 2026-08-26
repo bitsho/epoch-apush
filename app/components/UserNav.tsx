@@ -11,7 +11,7 @@ export default function UserNav({
 }: {
   compact?: boolean;
   hideHome?: boolean;
-  analysisGame?: "codenames" | "stakeholder" | "timeline";
+  analysisGame?: "codenames" | "stakeholder" | "timeline" | "quotes";
 }) {
   const [session, setSession] = useState<Session | null>(null);
   const analysisHref = `/analytics?game=${analysisGame}`;

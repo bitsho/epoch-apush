@@ -61,6 +61,32 @@ export type CodenamesResult = {
   };
 };
 
+export type QuoteResult = {
+  schemaVersion: number;
+  resultId: string;
+  gameType: "quotes";
+  score: number;
+  correct: number;
+  total: number;
+  maxStreak: number;
+  completedAt: string;
+  details: {
+    accuracy: number;
+    questionId: string;
+    authorId: string;
+    authorName: string;
+    selectedPersonId: string;
+    selectedPersonName: string;
+    source: string;
+    date: string;
+    apush: string;
+    unit: number | null;
+    correct: boolean;
+    streak: number;
+    reviewMode: boolean;
+  };
+};
+
 export function isCodenamesResult(value: unknown): value is CodenamesResult {
   if (!value || typeof value !== "object") return false;
   const row = value as Partial<CodenamesResult>;
@@ -71,6 +97,22 @@ export function isCodenamesResult(value: unknown): value is CodenamesResult {
     typeof row.score === "number" &&
     !!row.details &&
     Array.isArray(row.details.guesses)
+  );
+}
+
+export function isQuoteResult(value: unknown): value is QuoteResult {
+  if (!value || typeof value !== "object") return false;
+  const row = value as Partial<QuoteResult>;
+  return (
+    row.gameType === "quotes" &&
+    typeof row.resultId === "string" &&
+    typeof row.completedAt === "string" &&
+    typeof row.score === "number" &&
+    typeof row.correct === "number" &&
+    typeof row.total === "number" &&
+    !!row.details &&
+    typeof row.details.questionId === "string" &&
+    typeof row.details.authorId === "string"
   );
 }
 
@@ -152,7 +194,13 @@ export function readTimelineResults(): TimelineResult[] {
   );
 }
 
-export function clearGuestResults(gameType: "codenames" | "timeline") {
+export function readQuoteResults(): QuoteResult[] {
+  return readGuestResults().filter(isQuoteResult).sort((a, b) =>
+    b.completedAt.localeCompare(a.completedAt),
+  );
+}
+
+export function clearGuestResults(gameType: "codenames" | "timeline" | "quotes") {
   const remaining = readGuestResults().filter((row) => {
     if (!row || typeof row !== "object" || !("gameType" in row)) return true;
     return (row as { gameType?: unknown }).gameType !== gameType;
@@ -161,7 +209,7 @@ export function clearGuestResults(gameType: "codenames" | "timeline") {
   window.dispatchEvent(new CustomEvent("epoch:results-updated"));
 }
 
-async function storeGameResult(value: CodenamesResult | TimelineResult): Promise<boolean> {
+async function storeGameResult(value: CodenamesResult | TimelineResult | QuoteResult): Promise<boolean> {
   try {
     const response = await fetch("/api/results", {
       method: "POST",
@@ -195,5 +243,10 @@ export async function storeCodenamesResult(value: unknown): Promise<boolean> {
 
 export async function storeTimelineResult(value: unknown): Promise<boolean> {
   if (!isTimelineResult(value)) return false;
+  return storeGameResult(value);
+}
+
+export async function storeQuoteResult(value: unknown): Promise<boolean> {
+  if (!isQuoteResult(value)) return false;
   return storeGameResult(value);
 }

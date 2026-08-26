@@ -4,7 +4,7 @@ import { getDb } from "../../../db";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const GAME_TYPES = new Set(["cat", "stakeholder", "timeline", "codenames"]);
+const GAME_TYPES = new Set(["cat", "stakeholder", "timeline", "codenames", "quotes"]);
 
 export async function GET() {
   const user = await getCurrentUser();

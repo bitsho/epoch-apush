@@ -34,6 +34,17 @@ const tools = [
     meta: ["300+", "AP 九个单元", "中英双语"],
     tone: "timeline",
   },
+  {
+    number: "04",
+    eyebrow: "QUOTE IDENTIFICATION",
+    title: "美国史引文\n人物挑战",
+    description:
+      "从史料原文判断作者，在人物肖像、时代背景、原始出处和 APUSH 考点之间建立联系，并通过错题重练强化人物辨识。",
+    href: "/quotes",
+    action: "开始历史引文挑战",
+    meta: ["150 条史料引文", "50 位核心人物", "错题重练"],
+    tone: "quotes",
+  },
 ];
 
 export default function LearningHub() {
@@ -51,7 +62,7 @@ export default function LearningHub() {
         <p className="hub-eyebrow">AMERICAN HISTORY · LEARNING SUITE</p>
         <h1>用线索连接历史，<br />练会人物如何思考。</h1>
         <div className="hub-intro">
-          <p>选择一种学习路径：用 Codenames 建立概念关联，通过利益相关者推演理解历史立场，或用时间线挑战巩固年代框架。</p>
+          <p>选择一种学习路径：建立概念关联、推演历史立场、巩固年代框架，或从原始引文辨认核心人物与时代主张。</p>
           <span>SELECT A LEARNING PATH ↓</span>
         </div>
       </section>

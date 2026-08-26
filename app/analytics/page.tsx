@@ -5,14 +5,17 @@ import UserNav from "../components/UserNav";
 import {
   clearGuestResults,
   isCodenamesResult,
+  isQuoteResult,
   normalizeTimelineResult,
   readCodenamesResults,
+  readQuoteResults,
   readTimelineResults,
   type CodenamesResult,
+  type QuoteResult,
   type TimelineResult,
 } from "../game-results";
 
-type AnalyticsGame = "codenames" | "timeline";
+type AnalyticsGame = "codenames" | "timeline" | "quotes";
 
 const MEDALS = [
   { key: "perfect", label: "完美通关" },
@@ -181,6 +184,59 @@ function TimelineAnalytics({ rows }: { rows: TimelineResult[] }) {
   </>;
 }
 
+function QuoteAnalytics({ rows }: { rows: QuoteResult[] }) {
+  const analysis = useMemo(() => {
+    const correct = rows.filter((row) => row.details.correct).length;
+    const units = Array.from({ length: 9 }, (_, index) => index + 1).map((unit) => {
+      const group = rows.filter((row) => row.details.unit === unit);
+      return { unit, count: group.length, accuracy: percent(group.filter((row) => row.details.correct).length, group.length) };
+    });
+    const misses = new Map<string, { author: string; selected: string; count: number }>();
+    for (const row of rows.filter((item) => !item.details.correct)) {
+      const current = misses.get(row.details.authorId) ?? {
+        author: row.details.authorName,
+        selected: row.details.selectedPersonName,
+        count: 0,
+      };
+      current.count += 1;
+      current.selected = row.details.selectedPersonName;
+      misses.set(row.details.authorId, current);
+    }
+    return {
+      accuracy: percent(correct, rows.length),
+      bestStreak: rows.reduce((best, row) => Math.max(best, row.maxStreak), 0),
+      authorsMastered: new Set(rows.filter((row) => row.details.correct).map((row) => row.details.authorId)).size,
+      reviewAccuracy: (() => {
+        const review = rows.filter((row) => row.details.reviewMode);
+        return review.length ? percent(review.filter((row) => row.details.correct).length, review.length) : null;
+      })(),
+      units,
+      misses: [...misses.values()].sort((a, b) => b.count - a.count || a.author.localeCompare(b.author)).slice(0, 10),
+    };
+  }, [rows]);
+
+  if (!rows.length) return <EmptyState game="quotes" />;
+  return <>
+    <section className="analytics-kpis" aria-label="历史引文挑战核心指标">
+      <article><span>作答次数</span><strong>{rows.length}</strong><small>ATTEMPTS</small></article>
+      <article><span>人物辨识正确率</span><strong>{analysis.accuracy}%</strong><small>AUTHOR ACCURACY</small></article>
+      <article><span>最佳连胜</span><strong>{analysis.bestStreak}</strong><small>BEST STREAK</small></article>
+      <article><span>已正确辨识人物</span><strong>{analysis.authorsMastered}/50</strong><small>AUTHORS MASTERED</small></article>
+    </section>
+    <section className="analytics-grid">
+      <article className="analytics-panel analytics-wide">
+        <div className="analytics-panel-head"><div><span>RECENT PERFORMANCE</span><h2>最近 10 次人物辨识表现</h2></div><b>{rows[0]?.details.accuracy}%</b></div>
+        <RecentAccuracyChart values={rows.map((row) => row.details.accuracy)} label="历史引文挑战最近十次正确率" />
+      </article>
+      <UnitChart units={analysis.units} />
+      <article className="analytics-panel analytics-wide">
+        <div className="analytics-panel-head"><div><span>DIAGNOSTIC</span><h2>最常辨识错误的历史人物</h2></div>{analysis.reviewAccuracy !== null && <b>{analysis.reviewAccuracy}% 重练</b>}</div>
+        {analysis.misses.length ? <ol className="miss-list">{analysis.misses.map((item) => <li key={item.author}><span>{item.author}<small>最近误选：{item.selected}</small></span><b>{item.count} 次</b></li>)}</ol> : <p className="analytics-no-misses">目前没有人物辨识错误记录。</p>}
+      </article>
+    </section>
+  </>;
+}
+
 function UnitChart({ units }: { units: Array<{ unit: number; count: number; accuracy: number }> }) {
   return <article className="analytics-panel analytics-wide">
     <div className="analytics-panel-head"><div><span>AP UNITS</span><h2>Unit 1–9 正确率</h2></div></div>
@@ -190,11 +246,12 @@ function UnitChart({ units }: { units: Array<{ unit: number; count: number; accu
 
 function EmptyState({ game }: { game: AnalyticsGame }) {
   const timeline = game === "timeline";
+  const quotes = game === "quotes";
   return <section className="analytics-empty">
-    <span>{timeline ? "NO PRACTICE YET" : "NO MISSIONS YET"}</span>
-    <h2>{timeline ? "完成第一次时间线练习，数据会自动出现在这里。" : "完成第一局，数据会自动出现在这里。"}</h2>
-    <p>{timeline ? "系统会记录定位正确率、最高连击、题库难度、AP Unit 和易错事件。" : "每局只记录一次；正确选择、误选词条、难度和 AP Unit 都会进入分析。"}</p>
-    <a href={timeline ? "/timeline" : "/codenames"}>{timeline ? "开始时间线练习 →" : "开始第一局 →"}</a>
+    <span>{timeline ? "NO PRACTICE YET" : quotes ? "NO QUOTES ANSWERED" : "NO MISSIONS YET"}</span>
+    <h2>{timeline ? "完成第一次时间线练习，数据会自动出现在这里。" : quotes ? "完成第一道人物引文题，数据会自动出现在这里。" : "完成第一局，数据会自动出现在这里。"}</h2>
+    <p>{timeline ? "系统会记录定位正确率、最高连击、题库难度、AP Unit 和易错事件。" : quotes ? "系统会记录人物辨识正确率、连胜、AP Unit、错选人物和错题重练表现。" : "每局只记录一次；正确选择、误选词条、难度和 AP Unit 都会进入分析。"}</p>
+    <a href={timeline ? "/timeline" : quotes ? "/quotes" : "/codenames"}>{timeline ? "开始时间线练习 →" : quotes ? "开始人物引文挑战 →" : "开始第一局 →"}</a>
   </section>;
 }
 
@@ -202,15 +259,17 @@ export default function AnalyticsPage() {
   const [game, setGame] = useState<AnalyticsGame>("codenames");
   const [codenamesRows, setCodenamesRows] = useState<CodenamesResult[]>([]);
   const [timelineRows, setTimelineRows] = useState<TimelineResult[]>([]);
+  const [quoteRows, setQuoteRows] = useState<QuoteResult[]>([]);
   const [source, setSource] = useState<"loading" | "account" | "guest">("loading");
 
   useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get("game");
-    if (requested === "timeline" || requested === "codenames") setGame(requested);
+    if (requested === "timeline" || requested === "codenames" || requested === "quotes") setGame(requested);
     let usingAccount = false;
     const refreshGuest = () => {
       setCodenamesRows(readCodenamesResults());
       setTimelineRows(readTimelineResults());
+      setQuoteRows(readQuoteResults());
       setSource("guest");
     };
     fetch("/api/results", { cache: "no-store" })
@@ -221,6 +280,7 @@ export default function AnalyticsPage() {
         usingAccount = true;
         setCodenamesRows(results.filter(isCodenamesResult));
         setTimelineRows(results.map(normalizeTimelineResult).filter((row): row is TimelineResult => row !== null));
+        setQuoteRows(results.filter(isQuoteResult));
         setSource("account");
       })
       .catch(refreshGuest);
@@ -234,10 +294,14 @@ export default function AnalyticsPage() {
   }, []);
 
   const timeline = game === "timeline";
+  const quotes = game === "quotes";
+  const gameHref = timeline ? "/timeline" : quotes ? "/quotes" : "/codenames";
+  const currentRows = timeline ? timelineRows : quotes ? quoteRows : codenamesRows;
   const clearResults = () => {
-    if (!window.confirm(`确定清空当前浏览器中的${timeline ? "时间线" : " Codenames"}历史数据吗？`)) return;
+    const label = timeline ? "时间线" : quotes ? "历史引文" : "Codenames";
+    if (!window.confirm(`确定清空当前浏览器中的${label}历史数据吗？`)) return;
     clearGuestResults(game);
-    if (timeline) setTimelineRows([]); else setCodenamesRows([]);
+    if (timeline) setTimelineRows([]); else if (quotes) setQuoteRows([]); else setCodenamesRows([]);
   };
 
   return (
@@ -247,22 +311,23 @@ export default function AnalyticsPage() {
           <span className="hub-brand-mark">E</span>
           <span><strong>EPOCH</strong><small>LEARNING ANALYTICS</small></span>
         </a>
-        <div className="analytics-nav-actions"><a className="analytics-back" href={timeline ? "/timeline" : "/codenames"}>返回游戏 →</a><UserNav compact hideHome analysisGame={game} /></div>
+        <div className="analytics-nav-actions"><a className="analytics-back" href={gameHref}>返回游戏 →</a><UserNav compact hideHome analysisGame={game} /></div>
       </header>
 
       <section className="analytics-hero">
-        <div><p className="hub-eyebrow">{timeline ? "APUSH TIMELINE · CHRONOLOGY" : "APUSH CODENAMES · HISTORY"}</p><h1>学习数据分析</h1></div>
-        <p>{timeline ? "从事件定位、连击、题库难度与 AP Unit 四个角度诊断年代框架掌握情况。" : "从任务正确率、奖牌、难度与 AP Unit 四个角度定位概念关联能力。"}{source === "account" ? "当前显示已同步的账户记录。" : source === "guest" ? "当前显示本浏览器的游客记录。" : "正在载入个人记录。"}</p>
+        <div><p className="hub-eyebrow">{timeline ? "APUSH TIMELINE · CHRONOLOGY" : quotes ? "APUSH QUOTES · HISTORICAL VOICES" : "APUSH CODENAMES · HISTORY"}</p><h1>学习数据分析</h1></div>
+        <p>{timeline ? "从事件定位、连击、题库难度与 AP Unit 四个角度诊断年代框架掌握情况。" : quotes ? "从人物辨识、连胜、错选人物与 AP Unit 四个角度诊断史料引文掌握情况。" : "从任务正确率、奖牌、难度与 AP Unit 四个角度定位概念关联能力。"}{source === "account" ? "当前显示已同步的账户记录。" : source === "guest" ? "当前显示本浏览器的游客记录。" : "正在载入个人记录。"}</p>
       </section>
 
       <nav className="analytics-tabs" aria-label="游戏数据类别">
-        <a className={!timeline ? "active" : ""} href="/analytics?game=codenames">APUSH Codenames</a>
+        <a className={game === "codenames" ? "active" : ""} href="/analytics?game=codenames">APUSH Codenames</a>
         <a className={timeline ? "active" : ""} href="/analytics?game=timeline">时间线排序</a>
+        <a className={quotes ? "active" : ""} href="/analytics?game=quotes">历史引文人物</a>
       </nav>
 
-      {timeline ? <TimelineAnalytics rows={timelineRows} /> : <CodenamesAnalytics rows={codenamesRows} />}
+      {timeline ? <TimelineAnalytics rows={timelineRows} /> : quotes ? <QuoteAnalytics rows={quoteRows} /> : <CodenamesAnalytics rows={codenamesRows} />}
 
-      {(timeline ? timelineRows.length : codenamesRows.length) > 0 && <div className="analytics-footer-actions">{source === "guest" ? <button onClick={clearResults}>清空本机记录</button> : <span />}<a href={timeline ? "/timeline" : "/codenames"}>继续挑战 →</a></div>}
+      {currentRows.length > 0 && <div className="analytics-footer-actions">{source === "guest" ? <button onClick={clearResults}>清空本机记录</button> : <span />}<a href={gameHref}>继续挑战 →</a></div>}
     </main>
   );
 }

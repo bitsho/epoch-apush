@@ -1,0 +1,246 @@
+@import url('https://fontsapi.zeoseven.com/309/main/result.css');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+.quote-game-shell{--navy:#061827;--navy2:#0c2a3d;--gold:#c79a4b;--gold2:#f0d28b;--red:#6f130f;--paper:#dec59a;--ink:#251a0e}
+.quote-game-shell,.quote-game-shell *{box-sizing:border-box}
+.quote-game-shell{background:#061827;scroll-behavior:smooth}
+.quote-game-shell{margin:0;color:#f4d995;background:#030d16;font-family:Georgia,'KingHwaOldSong','京華老宋体','Noto Serif SC','Songti SC',serif}
+.quote-game-shell button{font:inherit}.quote-game-shell button:focus-visible,.quote-game-shell a:focus-visible{outline:3px solid #ffe07a;outline-offset:3px}
+.quote-game-shell{min-height:100vh;padding-bottom:70px;border:4px ridge #8d6a31;background-color:#071927;background-image:radial-gradient(circle at 15% 25%,rgba(207,169,82,.10) 0 1px,transparent 2px),radial-gradient(circle at 73% 12%,rgba(255,255,255,.05) 0 1px,transparent 2px),linear-gradient(115deg,rgba(255,255,255,.018),transparent 45%);background-size:47px 47px,61px 61px,100% 100%}
+.quote-game-shell .topbar{position:relative;min-height:90px;display:flex;align-items:center;gap:16px;padding:10px 26px;border-bottom:3px double #9b6a29;background:linear-gradient(180deg,#031421,#071e30);box-shadow:0 6px 18px #0009;z-index:10}.quote-game-shell .topbar:after{content:'✦  ·  ✦  ·  ✦';position:absolute;bottom:4px;left:44%;color:#b08642;font-size:11px;letter-spacing:6px}
+.quote-game-shell .seal{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;border:3px double #b38742;color:#e9c876;background:radial-gradient(circle,#173448,#071521);box-shadow:0 0 0 3px #2d210f;cursor:pointer}.quote-game-shell .seal span{font-size:23px;line-height:1}.quote-game-shell .seal small{font-size:10px;letter-spacing:1px}
+.quote-game-shell .brand-copy h1{margin:0;font-size:25px;letter-spacing:.7px;text-shadow:0 2px 0 #000}.quote-game-shell .brand-copy p{margin:3px 0 0;color:#dbc993;font-size:13px}.quote-game-shell .capitol{position:relative;width:150px;height:62px;margin-left:auto;opacity:.6}.quote-game-shell .capitol b{position:absolute;left:25px;right:25px;bottom:5px;height:25px;border:2px solid #b79a62;border-top:0;background:repeating-linear-gradient(90deg,transparent 0 10px,#b79a62 11px 13px,transparent 14px 23px)}.quote-game-shell .capitol b:before{content:'';position:absolute;left:-18px;right:-18px;bottom:-5px;border-bottom:5px solid #b79a62}.quote-game-shell .capitol i{position:absolute;left:50%;bottom:30px;width:74px;height:27px;transform:translateX(-50%);border:2px solid #b79a62;border-radius:50% 50% 0 0}.quote-game-shell .capitol i:before{content:'★';position:absolute;left:50%;top:-24px;transform:translateX(-50%);font-style:normal}
+.quote-game-shell .header-stats{display:flex;align-self:stretch}.quote-game-shell .header-stats>span,.quote-game-shell .header-stats>button{min-width:118px;padding:8px 16px;border:0;border-left:1px solid #213b48;color:#e5ca87;background:transparent;display:flex;flex-direction:column;justify-content:center;font-size:14px;text-align:left}.quote-game-shell .header-stats>button{cursor:pointer}.quote-game-shell .header-stats>button:hover{background:#102b3c}.quote-game-shell .header-stats small{color:#d8c594;margin-top:3px}
+
+.quote-game-shell .quiz-stage{display:grid;grid-template-columns:minmax(230px,300px) minmax(390px,1fr) minmax(445px,510px);gap:22px;padding:28px 24px 26px;min-height:570px;border-bottom:3px double #9b6a29;box-shadow:inset 0 -30px 60px #0005}
+.quote-game-shell .mystery-panel{display:flex;flex-direction:column;align-items:center;justify-content:center}.quote-game-shell .oval-frame{width:min(250px,90%);height:350px;border-radius:50%;padding:12px;border:10px ridge #b98838;background:#0c1b26;box-shadow:0 0 0 4px #2e2110,0 18px 35px #0009}.quote-game-shell .silhouette{position:relative;width:100%;height:100%;overflow:hidden;border-radius:50%;background:radial-gradient(circle at 45% 35%,#dcc89f 0,#b99b64 48%,#6d5736 100%)}.quote-game-shell .silhouette-head{position:absolute;z-index:2;width:110px;height:145px;left:50%;top:68px;transform:translateX(-50%);background:#050505;border-radius:50% 44% 46% 50%;box-shadow:-20px -8px 0 -7px #050505}.quote-game-shell .silhouette-head:after{content:'';position:absolute;width:34px;height:57px;right:-15px;top:50px;background:#050505;border-radius:60%}.quote-game-shell .silhouette-body{position:absolute;width:230px;height:180px;left:50%;bottom:-35px;transform:translateX(-50%);background:#050505;border-radius:50% 50% 0 0}
+.quote-game-shell .who-card{margin-top:-15px;z-index:2;width:230px;text-align:center;padding:14px;background:#071724;border:5px double #af7c30;box-shadow:0 10px 20px #0009;clip-path:polygon(8% 0,92% 0,100% 18%,100% 82%,92% 100%,8% 100%,0 82%,0 18%)}.quote-game-shell .who-card strong{display:block;font-size:22px}.quote-game-shell .who-card small{display:block;color:#d7be7b;margin-top:4px}
+.quote-game-shell .quote-paper{position:relative;min-height:500px;padding:68px 42px 45px;display:flex;flex-direction:column;justify-content:center;text-align:center;color:#17120d;background:radial-gradient(circle at 50% 35%,#efdfbf,#cfaf78);clip-path:polygon(2% 2%,31% 1%,49% 2%,78% 1%,98% 2%,99% 28%,98% 52%,99% 95%,96% 99%,67% 98%,42% 99%,3% 98%,1% 94%,2% 54%,0 30%);filter:drop-shadow(0 12px 12px #0008)}.quote-game-shell .quote-paper:before{content:'';position:absolute;inset:15px;border:1px solid rgba(126,89,43,.65);pointer-events:none}.quote-game-shell .quote-paper:after{content:'';position:absolute;inset:0;opacity:.18;pointer-events:none;background-image:radial-gradient(circle,#73552f 0 1px,transparent 1.5px),linear-gradient(80deg,transparent 70%,#fff4d2 72%,transparent 73%);background-size:21px 27px,100% 100%}.quote-game-shell .ribbon{position:absolute;top:0;left:50%;transform:translate(-50%,-8%);z-index:3;white-space:nowrap;background:linear-gradient(#7d1712,#4d0806);color:#f3d98b;padding:9px 34px;border:2px ridge #bd7e32;box-shadow:0 5px 12px #0008;font-weight:bold}.quote-game-shell .quote-mark{position:absolute;z-index:2;top:72px;left:43px;font-family:Georgia;font-size:52px;color:#17120d}.quote-game-shell .quote-paper blockquote{position:relative;z-index:2;margin:0;font-family:'Brush Script MT','Segoe Script','URW Chancery L',cursive;font-size:clamp(27px,2.5vw,43px);line-height:1.35;font-weight:500}.quote-game-shell .paper-flourish{position:relative;z-index:2;margin-top:28px;color:#9a7138}.quote-game-shell .paper-star{position:absolute;z-index:4;right:28px;bottom:27px;width:36px;height:36px;border:1px solid #9b713c;background:#d2b681;color:#8e642f;cursor:pointer}.quote-game-shell .paper-star.saved{background:#8a1812;color:#ffe19b}
+.quote-game-shell .choices-panel h2{margin:0 0 12px;padding:9px;text-align:center;font-size:18px;background:linear-gradient(#741610,#4c0807);border:2px ridge #a66c2d;box-shadow:0 5px 14px #0007}.quote-game-shell .choices-panel h2 em{font-size:14px;font-weight:normal}.quote-game-shell .choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.quote-game-shell .person-card{position:relative;padding:6px 6px 10px;color:#251b10;background:linear-gradient(#ead8b6,#cbb182);border:3px ridge #b5915a;cursor:pointer;box-shadow:0 5px 12px #0006;transition:transform .18s,box-shadow .18s,opacity .18s}.quote-game-shell .person-card:not(:disabled):hover{transform:translateY(-3px);box-shadow:0 0 0 2px #f0d38c,0 8px 16px #0008}.quote-game-shell .person-card:disabled{cursor:default}.quote-game-shell .person-card img{width:100%;aspect-ratio:1/1.04;object-fit:cover;object-position:50% 22%;display:block;border:1px solid #5f482b;filter:saturate(.88) contrast(1.05)}.quote-game-shell .person-card strong,.quote-game-shell .person-card small{display:block}.quote-game-shell .person-card strong{font-size:15px;margin-top:6px;white-space:nowrap}.quote-game-shell .person-card small{font-size:11px;margin-top:2px;white-space:nowrap}.quote-game-shell .number{position:absolute;z-index:2;left:-2px;top:-2px;background:#781610;color:#f4d78e;width:30px;height:30px;display:grid;place-items:center;border:2px solid #a5662b}.quote-game-shell .person-card.correct{box-shadow:0 0 0 3px #dcb751,0 0 24px #cfab45;background:#e5cf94}.quote-game-shell .person-card.wrong{box-shadow:0 0 0 3px #8a1712;filter:saturate(.65)}.quote-game-shell .person-card.muted{opacity:.47}.quote-game-shell .card-result{position:absolute;z-index:3;right:10px;top:10px;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:#f0d48a;color:#1d5224;font-size:24px;font-weight:bold}.quote-game-shell .person-card.wrong .card-result{color:#7a120e}.quote-game-shell .keyboard-hint{text-align:center;color:#9fbaad;font-size:12px;margin:10px 0 0}
+
+.quote-game-shell .answer-section{min-height:180px;padding:30px 34px 32px;background:linear-gradient(180deg,#071826,#0a2232);border-bottom:3px double #946f36;scroll-margin-top:18px}.quote-game-shell .answer-section.revealed{display:grid;grid-template-columns:minmax(250px,320px) minmax(360px,1fr) minmax(370px,470px);gap:20px}.quote-game-shell .answer-locked{min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #73562d;color:#bda66b;background:#061521}.quote-game-shell .answer-locked span{font-size:22px}.quote-game-shell .answer-locked strong{font-size:18px;margin-top:6px}.quote-game-shell .answer-locked small{margin-top:5px}
+.quote-game-shell .answer-person{position:relative;padding-top:20px;text-align:center}.quote-game-shell .answer-ribbon{position:absolute;z-index:4;left:50%;top:0;transform:translateX(-50%);width:230px;padding:9px 12px;background:linear-gradient(#8b1b15,#5b0907);border:3px ridge #b97831;color:#ffe09a;font-size:18px;font-weight:bold}.quote-game-shell .answer-ribbon.incorrect{background:linear-gradient(#5d2730,#36161d)}.quote-game-shell .answer-portrait{width:235px;height:300px;margin:12px auto 0;border-radius:50% 50% 44% 44%;overflow:hidden;border:8px ridge #ad7d34;background:#132839;box-shadow:0 12px 20px #0008}.quote-game-shell .answer-portrait img{width:100%;height:100%;object-fit:cover;object-position:50% 16%}.quote-game-shell .nameplate{width:255px;margin:-12px auto 0;position:relative;padding:13px;border:5px double #a97531;background:#061622;box-shadow:0 8px 16px #0007}.quote-game-shell .nameplate strong,.quote-game-shell .nameplate span,.quote-game-shell .nameplate small{display:block}.quote-game-shell .nameplate strong{font-size:22px}.quote-game-shell .nameplate span{font-size:15px;margin-top:3px}.quote-game-shell .nameplate small{margin-top:7px;color:#c8ae72}
+.quote-game-shell .history-card,.quote-game-shell .wiki-card{color:#251b10;background:linear-gradient(100deg,#ead8b6,#d3bb8c);border:7px double #ae8951;box-shadow:0 8px 18px #0007}.quote-game-shell .history-card{padding:16px 24px 18px}.quote-game-shell .history-card h3,.quote-game-shell .wiki-card h3{margin:0;text-align:center;font-size:17px}.quote-game-shell .source-title{display:flex;justify-content:space-between;gap:10px;margin-top:16px;padding:10px 0;border-bottom:1px solid #b49a6c;color:#291d0f;text-decoration:none}.quote-game-shell .source-title:hover{text-decoration:underline}.quote-game-shell .source-title span{font-size:12px;text-align:right}.quote-game-shell .ornament{text-align:center;color:#9c773c;margin:8px 0}.quote-game-shell .history-card h4{margin:8px 0;font-size:15px;text-align:center}.quote-game-shell .history-card h4 span{font-weight:normal}.quote-game-shell .history-card p{font-size:14px;line-height:1.65;margin:12px 0}.quote-game-shell .english-context{font-family:Georgia,serif;font-size:13px!important;line-height:1.5!important}.quote-game-shell .apush-focus{display:flex;gap:10px;align-items:center;margin:13px 0;padding:8px;border:1px solid #a98a59;background:#cdb27f66;font-size:13px}.quote-game-shell .apush-focus b{color:#72130f}.quote-game-shell .favorite-btn{display:block;margin:14px auto 0;padding:8px 18px;border:2px ridge #ad7b34;background:#0b2537;color:#edcf82;cursor:pointer}.quote-game-shell .favorite-btn.saved{background:#71130f}
+.quote-game-shell .wiki-card{padding:16px 14px}.quote-game-shell .wiki-card h3{color:#d3b86f;background:#0b2535;margin:-16px -14px 12px;padding:12px}.quote-game-shell .wiki-card h3 span{font-size:12px;font-weight:normal}.quote-game-shell .wiki-list{display:flex;flex-direction:column}.quote-game-shell .wiki-list a{min-height:62px;display:grid;grid-template-columns:22px 42px 1fr 32px;gap:9px;align-items:center;padding:7px 0;border-bottom:1px solid #b39b70;color:#251b10;text-decoration:none}.quote-game-shell .wiki-list a:hover{background:#fff4d744}.quote-game-shell .wiki-number{align-self:start;background:#781610;color:#f4d78e;padding:3px;text-align:center;font-size:10px}.quote-game-shell .wiki-list img{width:42px;height:47px;object-fit:cover;object-position:50% 18%;border:1px solid #6c5130}.quote-game-shell .wiki-list span b,.quote-game-shell .wiki-list span small{display:block}.quote-game-shell .wiki-list span b{font-size:13px}.quote-game-shell .wiki-list span small{font-size:11px;margin-top:3px}.quote-game-shell .wiki-w{font-family:Georgia;font-size:26px;text-align:center}
+
+.quote-game-shell .bottom-nav{position:fixed;z-index:30;left:4px;right:4px;bottom:0;height:66px;display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr 1fr;border-top:3px double #a17634;background:linear-gradient(#071c2c,#03121e);box-shadow:0 -6px 20px #0009}.quote-game-shell .bottom-nav button{display:flex;align-items:center;justify-content:center;gap:11px;border:0;border-right:1px solid #284050;color:#e5c77d;background:transparent;cursor:pointer}.quote-game-shell .bottom-nav button:hover{background:#102d40}.quote-game-shell .bottom-nav button>b{font-size:22px}.quote-game-shell .bottom-nav button span,.quote-game-shell .bottom-nav button small{display:block}.quote-game-shell .bottom-nav button small{font-size:11px;margin-top:2px;color:#c2ae78}.quote-game-shell .bottom-nav .next-button{margin:-3px 0;background:linear-gradient(#8c1b15,#5c0907);border:4px ridge #ae7532;font-size:18px}.quote-game-shell .bottom-nav .next-button:hover{background:linear-gradient(#a1261d,#70100b)}
+.quote-game-shell .modal-backdrop{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:#000b;backdrop-filter:blur(5px)}.quote-game-shell .modal-card{position:relative;width:min(560px,100%);padding:28px;color:#2b1d0e;background:linear-gradient(135deg,#ebdbba,#cdb07b);border:8px double #ae7f38;box-shadow:0 20px 60px #000}.quote-game-shell .modal-close{position:absolute;right:10px;top:6px;border:0;background:transparent;font-size:30px;color:#6e130f;cursor:pointer}.quote-game-shell .modal-card h2{text-align:center;margin:0 0 24px}.quote-game-shell .modal-card h2 span{display:block;font-size:13px;font-weight:normal;margin-top:4px}.quote-game-shell .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.quote-game-shell .stat-grid div{padding:17px 8px;text-align:center;border:1px solid #9f7b44;background:#f5e8c6aa}.quote-game-shell .stat-grid strong,.quote-game-shell .stat-grid span{display:block}.quote-game-shell .stat-grid strong{font-size:27px;color:#71130e}.quote-game-shell .stat-grid span{font-size:12px;margin-top:4px}.quote-game-shell .progress-track{height:12px;margin:20px 0;background:#9c825b}.quote-game-shell .progress-track i{display:block;height:100%;background:#71130e}.quote-game-shell .modal-card>p{text-align:center;font-size:14px}.quote-game-shell .setting-row{display:flex;justify-content:space-between;align-items:center;padding:14px 4px;border-bottom:1px solid #aa8a5a}.quote-game-shell .setting-row b,.quote-game-shell .setting-row small{display:block}.quote-game-shell .setting-row small{font-size:11px;margin-top:3px}.quote-game-shell .setting-row input{width:22px;height:22px;accent-color:#77140f}.quote-game-shell .reset-button{display:block;margin:25px auto 0;padding:10px 18px;border:2px ridge #8e632e;background:#68100c;color:#f4d58a;cursor:pointer}
+.quote-game-shell.quiet-motion *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+
+@media(max-width:1260px){.quote-game-shell .capitol{display:none}.quote-game-shell .header-stats>span,.quote-game-shell .header-stats>button{min-width:100px;padding-inline:11px}.quote-game-shell .quiz-stage{grid-template-columns:235px minmax(350px,1fr) 435px}.quote-game-shell .choice-grid{gap:8px}.quote-game-shell .person-card strong{font-size:13px}.quote-game-shell .person-card small{font-size:10px}.quote-game-shell .answer-section.revealed{grid-template-columns:260px 1fr}.quote-game-shell .wiki-card{grid-column:1/-1}.quote-game-shell .wiki-list{display:grid;grid-template-columns:repeat(2,1fr);column-gap:20px}}
+@media(max-width:960px){.quote-game-shell .header-stats>span:nth-child(-n+2){display:none}.quote-game-shell .quiz-stage{grid-template-columns:220px 1fr}.quote-game-shell .choices-panel{grid-column:1/-1}.quote-game-shell .choice-grid{grid-template-columns:repeat(6,1fr)}.quote-game-shell .mystery-panel{justify-content:start}.quote-game-shell .oval-frame{height:320px}.quote-game-shell .answer-section.revealed{grid-template-columns:1fr}.quote-game-shell .answer-person{padding-bottom:10px}.quote-game-shell .wiki-card{grid-column:auto}}
+@media(max-width:700px){.quote-game-shell{padding-bottom:58px}.quote-game-shell .topbar{padding:10px 12px;min-height:72px}.quote-game-shell .seal{width:46px;height:46px}.quote-game-shell .seal span{font-size:17px}.quote-game-shell .brand-copy h1{font-size:16px}.quote-game-shell .brand-copy p{font-size:10px}.quote-game-shell .header-stats{display:none}.quote-game-shell .quiz-stage{display:block;padding:18px 10px}.quote-game-shell .mystery-panel{display:none}.quote-game-shell .quote-paper{min-height:390px;padding:58px 23px 35px}.quote-game-shell .quote-mark{top:58px;left:26px}.quote-game-shell .quote-paper blockquote{font-size:29px}.quote-game-shell .choices-panel{margin-top:18px}.quote-game-shell .choices-panel h2{font-size:15px}.quote-game-shell .choice-grid{grid-template-columns:repeat(2,1fr);gap:9px}.quote-game-shell .person-card strong{font-size:13px}.quote-game-shell .person-card small{font-size:10px}.quote-game-shell .answer-section{padding:22px 10px}.quote-game-shell .answer-section.revealed{display:block}.quote-game-shell .history-card,.quote-game-shell .wiki-card{margin-top:18px}.quote-game-shell .history-card{padding:15px}.quote-game-shell .wiki-list{display:block}.quote-game-shell .bottom-nav{height:58px}.quote-game-shell .bottom-nav button{gap:0}.quote-game-shell .bottom-nav button>b{font-size:19px}.quote-game-shell .bottom-nav button span{display:none}.quote-game-shell .bottom-nav .next-button span{display:block;font-size:13px}.quote-game-shell .stat-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* Requested typography, answer readability, mistake book and navigation refinements. */
+.quote-game-shell .quote-paper blockquote{font-family:Copperplate,'Copperplate Gothic Light','Copperplate Gothic Bold',Georgia,serif;letter-spacing:.025em}
+.quote-game-shell .mistake-marker{position:absolute;z-index:4;right:28px;bottom:27px;width:36px;height:36px;display:grid;place-items:center;border:1px solid #9b713c;background:#d2b681;color:#8e642f}
+.quote-game-shell .mistake-marker.saved{background:#8a1812;color:#ffe19b;box-shadow:0 0 0 2px #d7b76b}
+.quote-game-shell .history-card{padding:18px 27px 21px}
+.quote-game-shell .history-card h3{font-size:21px}
+.quote-game-shell .source-title{gap:14px;margin-top:18px;padding:12px 0;font-size:17px}
+.quote-game-shell .source-title span{font-size:14px}
+.quote-game-shell .ornament{margin:10px 0;font-size:16px}
+.quote-game-shell .history-card h4{margin:10px 0;font-size:18px}
+.quote-game-shell .history-card h4 span{font-size:15px}
+.quote-game-shell .history-card p{font-size:17px;line-height:1.68;margin:14px 0}
+.quote-game-shell .english-context{font-size:15px!important;line-height:1.58!important}
+.quote-game-shell .apush-focus{gap:11px;margin:15px 0;padding:10px;font-size:15px}
+.quote-game-shell .apush-focus b{white-space:nowrap}
+.quote-game-shell .mistake-status{display:block;margin:16px auto 0;padding:9px 18px;border:2px ridge #ad7b34;text-align:center;font-size:14px}
+.quote-game-shell .mistake-status.added{background:#71130f;color:#ffe09a}
+.quote-game-shell .mistake-status.cleared{background:#173b2b;color:#f0d995}
+.quote-game-shell .wiki-card h3{padding:13px;font-size:19px}
+.quote-game-shell .wiki-card h3 span{font-size:13px}
+.quote-game-shell .wiki-list a{min-height:70px;grid-template-columns:26px 48px 1fr 34px;gap:10px;padding:8px 0}
+.quote-game-shell .wiki-number{align-self:center;justify-self:center;min-width:23px;height:23px;display:grid;place-items:center;padding:2px;font-size:12px}
+.quote-game-shell .wiki-list img{width:48px;height:54px}
+.quote-game-shell .wiki-list span b{font-size:15px}
+.quote-game-shell .wiki-list span small{font-size:12.5px;margin-top:4px}
+.quote-game-shell .wiki-w{font-size:28px}
+.quote-game-shell .stats-nav-icon{position:relative;width:28px;height:25px;display:flex!important;align-items:flex-end;gap:3px;padding:0 0 4px 5px}
+.quote-game-shell .stats-nav-icon:before,.quote-game-shell .stats-nav-icon:after{content:'';position:absolute;background:#d6b869}
+.quote-game-shell .stats-nav-icon:before{left:2px;bottom:2px;width:2px;height:22px}
+.quote-game-shell .stats-nav-icon:after{left:2px;right:0;bottom:2px;height:2px}
+.quote-game-shell .stats-nav-icon i{position:relative;z-index:1;width:5px;border:1px solid #d6b869;background:#765522}
+.quote-game-shell .stats-nav-icon i:nth-child(1){height:8px}.quote-game-shell .stats-nav-icon i:nth-child(2){height:14px}.quote-game-shell .stats-nav-icon i:nth-child(3){height:20px}
+@media(max-width:700px){.quote-game-shell .history-card{padding:17px}.quote-game-shell .history-card p{font-size:16px}.quote-game-shell .wiki-list a{min-height:66px}.quote-game-shell .stats-nav-icon{transform:scale(.85)}}
+
+/* Generated antique UI artwork replaces the provisional CSS illustrations. */
+.quote-game-shell .seal{width:76px;height:70px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+.quote-game-shell .seal img{display:block;width:100%;height:100%;object-fit:fill;filter:drop-shadow(0 3px 4px #000b)}
+.quote-game-shell .capitol{width:174px;height:70px;margin-left:auto;opacity:.72}
+.quote-game-shell .capitol img{display:block;width:100%;height:100%;object-fit:fill;filter:sepia(.15) drop-shadow(0 3px 4px #0008)}
+.quote-game-shell .oval-frame{width:min(276px,96%);height:368px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;display:flex;align-items:center;justify-content:center}
+.quote-game-shell .mystery-medallion{display:block;width:100%;height:100%;object-fit:contain;object-position:center;filter:drop-shadow(0 18px 20px #0009)}
+.quote-game-shell .who-card{margin-top:-25px}
+@media(max-width:960px){.quote-game-shell .oval-frame{height:340px}.quote-game-shell .who-card{margin-top:-22px}}
+@media(max-width:700px){.quote-game-shell .seal{width:55px;height:50px}}
+
+/* 50-person edition: generated parchment, aligned medallions and one-screen desktop layout. */
+.quote-game-shell,.quote-game-shell button,.quote-game-shell input,.quote-game-shell label{font-family:'KingHwaOldSong','京华老宋体','京華老宋体','Noto Serif SC','Songti SC',serif}
+.quote-game-shell .topbar{isolation:isolate}
+.quote-game-shell .brand-copy,.quote-game-shell .seal,.quote-game-shell .header-stats{position:relative;z-index:2}
+.quote-game-shell .capitol{position:absolute;z-index:1;left:50%;top:50%;transform:translate(-50%,-50%);margin:0!important;opacity:.82}
+.quote-game-shell .topbar:after{left:50%;transform:translateX(-50%)}
+.quote-game-shell .quote-paper{background-color:transparent;background-image:url('/ui/quote-parchment.png');background-position:center;background-repeat:no-repeat;background-size:100% 100%;clip-path:none;filter:drop-shadow(0 10px 12px #0009)}
+.quote-game-shell .quote-paper:before{inset:24px;border-color:rgba(110,74,34,.45)}
+.quote-game-shell .quote-paper:after{display:none}
+.quote-game-shell .quote-paper blockquote{font-family:'Great Vibes','Segoe Script',cursive;letter-spacing:.012em;font-weight:400;line-height:1.25}
+.quote-game-shell .who-card{position:relative;overflow:visible;clip-path:none;border:5px double #af7c30;outline:2px solid #3a2814;outline-offset:3px}
+.quote-game-shell .who-card:before,.quote-game-shell .who-card:after{content:'✦';position:absolute;top:50%;transform:translateY(-50%);width:22px;height:22px;display:grid;place-items:center;color:#e0bd68;background:#071724;border:1px solid #a87931}
+.quote-game-shell .who-card:before{left:-15px}.quote-game-shell .who-card:after{right:-15px}
+.quote-game-shell .answer-portrait{position:relative;width:238px;height:304px;margin:9px auto 0;border:0;border-radius:0;overflow:visible;background:transparent;box-shadow:none}
+.quote-game-shell .answer-frame-art{position:absolute;z-index:1;inset:0;width:100%!important;height:100%!important;object-fit:fill!important;filter:drop-shadow(0 12px 15px #000a)}
+.quote-game-shell .answer-photo-window{position:absolute;z-index:2;left:17%;right:17%;top:15%;bottom:15%;overflow:hidden;border-radius:50%;background:#241b12;box-shadow:inset 0 0 0 2px #c59a4e}
+.quote-game-shell .answer-photo-window img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;filter:saturate(.9) contrast(1.04)}
+.quote-game-shell .nameplate{z-index:4}
+.quote-game-shell .mistake-book-list{max-height:min(62vh,520px);overflow:auto;display:flex;flex-direction:column;gap:9px;padding-right:5px}
+.quote-game-shell .mistake-book-list button{position:relative;display:flex;flex-direction:column;gap:5px;padding:12px 58px 12px 14px;text-align:left;color:#2b1d0e;background:#f5e8c6aa;border:1px solid #9f7b44;cursor:pointer}
+.quote-game-shell .mistake-book-list button:hover{background:#fff2cd}
+.quote-game-shell .mistake-book-list button span{font-family:'Great Vibes','Segoe Script',cursive;font-size:23px;line-height:1.2}
+.quote-game-shell .mistake-book-list button small{color:#6f4c26}
+.quote-game-shell .mistake-book-list button b{position:absolute;right:12px;top:50%;transform:translateY(-50%);padding:6px 8px;color:#f2d68c;background:#70120e;border:1px solid #a77331}
+.quote-game-shell .empty-mistakes{min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px solid #a3814d;background:#f5e8c677}
+.quote-game-shell .empty-mistakes>span{font-size:25px}.quote-game-shell .empty-mistakes small{color:#705330}
+
+@media(min-width:1261px){
+  .quote-game-shell,.quote-game-shell{height:100%;overflow:hidden}
+  .quote-game-shell{height:100vh;min-height:0;padding-bottom:0;display:grid;grid-template-rows:70px minmax(0,47%) minmax(0,calc(53% - 120px)) 50px;overflow:hidden}
+  .quote-game-shell .topbar{min-height:0;height:70px;padding:5px 22px}
+  .quote-game-shell .seal{width:64px;height:59px}.quote-game-shell .brand-copy h1{font-size:22px}.quote-game-shell .brand-copy p{font-size:11px}
+  .quote-game-shell .capitol{width:150px;height:61px}
+  .quote-game-shell .header-stats>span,.quote-game-shell .header-stats>button{min-width:108px;padding:5px 13px;font-size:13px}.quote-game-shell .header-stats small{margin-top:1px}
+  .quote-game-shell .quiz-stage{min-height:0;height:100%;overflow:hidden;grid-template-columns:minmax(205px,270px) minmax(350px,1fr) minmax(420px,500px);gap:14px;padding:12px 16px 11px}
+  .quote-game-shell .mystery-panel{min-height:0}.quote-game-shell .oval-frame{width:min(246px,96%);height:min(318px,78%)}.quote-game-shell .who-card{width:215px;margin-top:-20px;padding:10px}.quote-game-shell .who-card strong{font-size:20px}
+  .quote-game-shell .quote-paper{min-height:0;height:100%;padding:47px 34px 30px}.quote-game-shell .quote-mark{top:56px;left:35px}.quote-game-shell .quote-paper blockquote{font-size:clamp(27px,2.3vw,39px)}.quote-game-shell .paper-flourish{margin-top:14px}.quote-game-shell .ribbon{padding:6px 28px}.quote-game-shell .mistake-marker{right:31px;bottom:26px;width:30px;height:30px}
+  .quote-game-shell .choices-panel{min-height:0;overflow:hidden}.quote-game-shell .choices-panel h2{margin-bottom:8px;padding:6px;font-size:16px}.quote-game-shell .choices-panel h2 em{font-size:12px}.quote-game-shell .choice-grid{height:calc(100% - 58px);gap:7px}.quote-game-shell .person-card{min-height:0;padding:4px 4px 6px;overflow:hidden}.quote-game-shell .person-card img{height:calc(100% - 39px);min-height:0;aspect-ratio:auto}.quote-game-shell .person-card strong{font-size:13px;margin-top:3px}.quote-game-shell .person-card small{font-size:10px;margin-top:0}.quote-game-shell .number{width:25px;height:25px}.quote-game-shell .keyboard-hint{margin:4px 0 0;font-size:10px}
+  .quote-game-shell .answer-section{min-height:0;height:100%;overflow:hidden;padding:12px 18px 11px;scroll-margin:0}.quote-game-shell .answer-section.revealed{grid-template-columns:minmax(205px,260px) minmax(360px,1fr) minmax(360px,440px);gap:13px}
+  .quote-game-shell .answer-locked{min-height:0;height:100%}.quote-game-shell .answer-person{min-height:0;padding-top:16px;overflow:hidden}.quote-game-shell .answer-ribbon{width:205px;padding:5px 9px;font-size:15px}.quote-game-shell .answer-portrait{width:190px;height:241px;margin-top:3px}.quote-game-shell .nameplate{width:218px;margin-top:-24px;padding:7px;border-width:4px}.quote-game-shell .nameplate strong{font-size:17px}.quote-game-shell .nameplate span{font-size:12px}.quote-game-shell .nameplate small{font-size:11px;margin-top:2px}
+  .quote-game-shell .history-card,.quote-game-shell .wiki-card{min-height:0;height:100%;overflow:hidden;border-width:5px}.quote-game-shell .history-card{padding:8px 16px}.quote-game-shell .history-card h3{font-size:17px}.quote-game-shell .source-title{margin-top:6px;padding:5px 0;font-size:14px}.quote-game-shell .source-title span{font-size:11px}.quote-game-shell .ornament{margin:2px 0;font-size:12px}.quote-game-shell .history-card h4{margin:3px 0;font-size:15px}.quote-game-shell .history-card h4 span{font-size:12px}.quote-game-shell .history-card p{font-size:14px;line-height:1.38;margin:6px 0}.quote-game-shell .english-context{font-size:11px!important;line-height:1.25!important;max-height:34px;overflow:hidden}.quote-game-shell .apush-focus{margin:6px 0;padding:5px;font-size:12px}.quote-game-shell .mistake-status{margin:6px auto 0;padding:4px 10px;font-size:11px}
+  .quote-game-shell .wiki-card{padding:9px 10px}.quote-game-shell .wiki-card h3{margin:-9px -10px 5px;padding:7px;font-size:15px}.quote-game-shell .wiki-card h3 span{font-size:10px}.quote-game-shell .wiki-list{height:calc(100% - 34px)}.quote-game-shell .wiki-list a{min-height:0;height:16.666%;grid-template-columns:22px 38px 1fr 28px;gap:7px;padding:3px 0}.quote-game-shell .wiki-number{width:20px;height:20px;min-width:20px;font-size:10px}.quote-game-shell .wiki-list img{width:38px;height:90%;max-height:44px}.quote-game-shell .wiki-list span b{font-size:13px}.quote-game-shell .wiki-list span small{font-size:10px;margin-top:1px}.quote-game-shell .wiki-w{font-size:23px}
+  .quote-game-shell .bottom-nav{position:static;left:auto;right:auto;bottom:auto;height:50px}.quote-game-shell .bottom-nav button>b{font-size:18px}.quote-game-shell .bottom-nav button small{font-size:9px}.quote-game-shell .bottom-nav .next-button{margin:-2px 0;font-size:15px}
+}
+
+@media(min-width:1261px) and (max-height:850px){
+  .quote-game-shell .history-card p{font-size:12.5px;line-height:1.25;margin:4px 0}.quote-game-shell .history-card h4{font-size:13px}.quote-game-shell .source-title{font-size:13px}.quote-game-shell .english-context{display:none}.quote-game-shell .apush-focus{font-size:11px;margin:4px 0}.quote-game-shell .mistake-status{margin-top:3px}
+  .quote-game-shell .answer-portrait{width:165px;height:210px}.quote-game-shell .nameplate{width:195px}.quote-game-shell .answer-section.revealed{grid-template-columns:210px minmax(350px,1fr) minmax(350px,415px)}
+  .quote-game-shell .wiki-list a{grid-template-columns:20px 34px 1fr 25px}.quote-game-shell .wiki-list img{width:34px}.quote-game-shell .wiki-list span b{font-size:12px}.quote-game-shell .wiki-list span small{font-size:9px}
+}
+
+/* Single-stage question/answer transition. */
+.quote-game-shell .header-stats{margin-left:auto}
+.quote-game-shell .experience-stage{display:grid;grid-template-columns:minmax(205px,270px) minmax(350px,1fr) minmax(420px,500px);gap:16px;padding:16px 18px;min-height:0;border-bottom:3px double #9b6a29;box-shadow:inset 0 -30px 60px #0005;overflow:hidden}
+.quote-game-shell .experience-stage>*{min-width:0;min-height:0}
+.quote-game-shell .experience-stage.answer-mode{animation:stage-change .42s ease-out both}
+@keyframes stage-change{from{opacity:.25;transform:translateY(8px)}to{opacity:1;transform:none}}
+.quote-game-shell .handwriting-quote{white-space:normal}
+.quote-game-shell .handwriting-quote>span{display:inline-block;opacity:0;filter:blur(1px);animation:ink-character .18s ease-out forwards}
+@keyframes ink-character{0%{opacity:0;filter:blur(2px);transform:translateY(2px)}65%{opacity:.72;filter:blur(.5px)}100%{opacity:1;filter:none;transform:none}}
+.quote-game-shell.quiet-motion .handwriting-quote>span{opacity:1;filter:none;transform:none;animation:none}
+.quote-game-shell .answer-quote{margin:10px 0 8px;padding:11px 15px;color:#27170c;background:#f6e8c47d;border:1px solid #b38a50;font-family:'Great Vibes','Segoe Script',cursive;font-size:clamp(24px,2vw,32px);line-height:1.28;text-align:center}
+.quote-game-shell .mistake-review-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:-9px 0 14px}
+.quote-game-shell .mistake-review-actions button{padding:11px 14px;border:3px ridge #a67331;color:#f6d88b;background:linear-gradient(#7c1812,#4f0907);cursor:pointer;font-weight:bold}
+.quote-game-shell .mistake-review-actions button:last-child{background:linear-gradient(#12364a,#071c2a)}
+.quote-game-shell .mistake-review-actions button:hover{filter:brightness(1.14)}
+.quote-game-shell .mistake-book-list article{display:flex;flex-direction:column;gap:5px;padding:11px 13px;color:#2b1d0e;background:#f5e8c6aa;border:1px solid #9f7b44}
+.quote-game-shell .mistake-book-list article span{font-family:'Great Vibes','Segoe Script',cursive;font-size:23px;line-height:1.2}
+.quote-game-shell .mistake-book-list article small{color:#6f4c26}
+
+@media(min-width:1261px){
+  .quote-game-shell{grid-template-rows:70px minmax(0,1fr) 50px}
+  .quote-game-shell .experience-stage{height:100%;grid-template-columns:minmax(205px,270px) minmax(350px,1fr) minmax(420px,500px);gap:16px;padding:15px 18px 14px}
+  .quote-game-shell .experience-stage .mystery-panel,.quote-game-shell .experience-stage .answer-person{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+  .quote-game-shell .experience-stage .oval-frame{width:min(252px,96%);height:min(348px,70%)}
+  .quote-game-shell .experience-stage .who-card{flex:none;width:222px;margin-top:-22px;padding:12px}
+  .quote-game-shell .experience-stage .quote-paper{height:100%;min-height:0;padding:78px 66px 60px;overflow:hidden}
+  .quote-game-shell .experience-stage .quote-paper blockquote{font-size:clamp(32px,2.65vw,44px);line-height:1.3}
+  .quote-game-shell .experience-stage .quote-mark{top:70px;left:58px}.quote-game-shell .experience-stage .paper-flourish{margin-top:22px}
+  .quote-game-shell .experience-stage .choices-panel{height:100%;display:flex;flex-direction:column;overflow:hidden}
+  .quote-game-shell .experience-stage .choices-panel h2{flex:none;margin-bottom:9px;padding:8px;font-size:17px}
+  .quote-game-shell .experience-stage .choice-grid{flex:1;height:auto;min-height:0;gap:9px}
+  .quote-game-shell .experience-stage .person-card{display:flex;flex-direction:column;min-height:0;padding:5px 5px 7px}
+  .quote-game-shell .experience-stage .person-card img{flex:1;height:auto;min-height:0;aspect-ratio:auto}
+  .quote-game-shell .experience-stage .person-card strong{font-size:14px;margin-top:4px}.quote-game-shell .experience-stage .person-card small{font-size:10.5px;margin-top:1px}
+  .quote-game-shell .experience-stage .answer-person{padding-top:0}
+  .quote-game-shell .experience-stage .answer-ribbon{position:relative;left:auto;top:auto;transform:none;width:222px;padding:8px 10px;font-size:17px}
+  .quote-game-shell .experience-stage .answer-portrait{width:min(252px,96%);height:min(348px,70%);margin-top:-3px}
+  .quote-game-shell .experience-stage .nameplate{width:228px;margin-top:-31px;padding:10px}.quote-game-shell .experience-stage .nameplate strong{font-size:20px}.quote-game-shell .experience-stage .nameplate span{font-size:14px}.quote-game-shell .experience-stage .nameplate small{font-size:12px;margin-top:4px}
+  .quote-game-shell .experience-stage .history-card,.quote-game-shell .experience-stage .wiki-card{height:100%;min-height:0;overflow:hidden;border-width:6px}
+  .quote-game-shell .experience-stage .history-card{padding:13px 22px;display:flex;flex-direction:column}
+  .quote-game-shell .experience-stage .history-card h3{font-size:20px}.quote-game-shell .experience-stage .source-title{margin-top:3px;padding:7px 0;font-size:16px}.quote-game-shell .experience-stage .source-title span{font-size:12px}
+  .quote-game-shell .experience-stage .ornament{margin:4px 0;font-size:14px}.quote-game-shell .experience-stage .history-card h4{margin:4px 0;font-size:17px}.quote-game-shell .experience-stage .history-card h4 span{font-size:13px}
+  .quote-game-shell .experience-stage .history-card p{font-size:16px;line-height:1.48;margin:7px 0}.quote-game-shell .experience-stage .english-context{font-size:13px!important;line-height:1.35!important;max-height:58px}
+  .quote-game-shell .experience-stage .apush-focus{margin:7px 0;padding:7px;font-size:14px}.quote-game-shell .experience-stage .mistake-status{margin:7px auto 0;padding:6px 12px;font-size:13px}
+  .quote-game-shell .experience-stage .wiki-card{padding:12px 12px}.quote-game-shell .experience-stage .wiki-card h3{margin:-12px -12px 7px;padding:10px;font-size:17px}
+  .quote-game-shell .experience-stage .wiki-list{height:calc(100% - 42px)}.quote-game-shell .experience-stage .wiki-list a{height:16.666%;grid-template-columns:24px 45px 1fr 30px;gap:8px;padding:4px 0}
+  .quote-game-shell .experience-stage .wiki-list img{width:45px;height:90%;max-height:58px}.quote-game-shell .experience-stage .wiki-list span b{font-size:14px}.quote-game-shell .experience-stage .wiki-list span small{font-size:11px}.quote-game-shell .experience-stage .wiki-w{font-size:25px}
+}
+
+@media(min-width:1261px) and (max-height:820px){
+  .quote-game-shell .experience-stage{padding-block:10px}.quote-game-shell .experience-stage .quote-paper{padding:66px 58px 48px}.quote-game-shell .experience-stage .quote-paper blockquote{font-size:clamp(29px,2.35vw,38px)}
+  .quote-game-shell .experience-stage .answer-quote{font-size:23px;margin:6px 0;padding:7px 11px}.quote-game-shell .experience-stage .history-card{padding:9px 18px}.quote-game-shell .experience-stage .history-card p{font-size:14px;line-height:1.32;margin:5px 0}.quote-game-shell .experience-stage .history-card h3{font-size:17px}.quote-game-shell .experience-stage .history-card h4{font-size:15px}.quote-game-shell .experience-stage .source-title{font-size:14px;padding:5px 0}.quote-game-shell .experience-stage .english-context{display:none}.quote-game-shell .experience-stage .apush-focus{font-size:12px;margin:5px 0;padding:5px}.quote-game-shell .experience-stage .mistake-status{font-size:11px;margin-top:4px;padding:4px 8px}
+  .quote-game-shell .experience-stage .answer-portrait{width:220px;height:min(298px,68%)}.quote-game-shell .experience-stage .nameplate{width:210px;margin-top:-26px}
+}
+
+@media(max-width:1260px){
+  .quote-game-shell .experience-stage{grid-template-columns:220px minmax(0,1fr);overflow:visible}.quote-game-shell .experience-stage .choices-panel,.quote-game-shell .experience-stage .wiki-card{grid-column:1/-1}.quote-game-shell .experience-stage.answer-mode{grid-template-columns:250px minmax(0,1fr)}
+}
+
+@media(max-width:700px){
+  .quote-game-shell .experience-stage,.quote-game-shell .experience-stage.answer-mode{display:block;padding:18px 10px}.quote-game-shell .experience-stage .mystery-panel{display:none}.quote-game-shell .experience-stage .quote-paper{min-height:440px;padding:74px 38px 48px}.quote-game-shell .experience-stage .quote-paper blockquote{font-size:31px}.quote-game-shell .experience-stage .choices-panel,.quote-game-shell .experience-stage .history-card,.quote-game-shell .experience-stage .wiki-card{margin-top:18px}.quote-game-shell .mistake-review-actions{grid-template-columns:1fr}
+}
+
+/* Quote integrity, expanded answer context, and denser option references. */
+.quote-game-shell .handwriting-quote>.handwriting-word{display:inline-block;white-space:nowrap;opacity:1;filter:none;animation:none}
+.quote-game-shell .handwriting-character{display:inline-block;opacity:0;filter:blur(1px);animation:ink-character .18s ease-out forwards}
+.quote-game-shell.quiet-motion .handwriting-character{opacity:1;filter:none;transform:none;animation:none}
+.quote-game-shell .wiki-number{align-self:center;display:grid;place-items:center;padding:0}
+.quote-game-shell .source-citation{display:flex;align-items:center;justify-content:center;gap:9px;margin:7px auto 2px;padding:8px 12px;border-bottom:1px solid #b49a6c;color:#291d0f;text-align:center;text-decoration:none;font-size:18px;line-height:1.3}
+.quote-game-shell .source-citation:hover{text-decoration:underline}.quote-game-shell .source-citation b{font-size:15px;color:#7b1812}
+.quote-game-shell .person-profile{margin-top:4px;padding-top:3px;border-top:1px solid #b69761}
+.quote-game-shell .person-profile h4{color:#4d3219}
+.quote-game-shell .profile-bio{margin:7px 0!important;font-size:17.5px!important;line-height:1.5!important}
+.quote-game-shell .person-timeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;position:relative;margin:10px 0 4px;padding:0;list-style:none}
+.quote-game-shell .person-timeline::before{content:'';position:absolute;z-index:0;left:7%;right:7%;top:28px;height:2px;background:linear-gradient(90deg,#8a621f,#c69a4d,#8a621f)}
+.quote-game-shell .person-timeline li{display:flex;flex-direction:column;align-items:center;gap:7px;position:relative;z-index:1;min-width:0;padding:0 6px;text-align:center;background:transparent;border:0}
+.quote-game-shell .person-timeline li::before{content:'';position:absolute;top:24px;left:50%;width:9px;height:9px;border-radius:50%;transform:translateX(-50%);background:#7b1712;border:2px solid #d3ad5f}
+.quote-game-shell .person-timeline time{display:grid;place-items:center;min-width:58px;height:22px;padding:0 7px;color:#f4d88e;background:#6f1712;border:1px solid #a47731;font-size:13px;font-weight:bold;line-height:1}
+.quote-game-shell .person-timeline li>span{display:block;width:100%;padding-top:12px;font-size:13px;line-height:1.25;color:#3f2b16;overflow-wrap:normal;word-break:keep-all}
+.quote-game-shell .profile-source{display:block;width:max-content;max-width:100%;margin:7px auto 0;color:#6f1712;font-size:12.5px;text-align:center;text-decoration:none}.quote-game-shell .profile-source:hover{text-decoration:underline}
+
+@media(min-width:1261px){
+  .quote-game-shell .experience-stage .quote-paper.quote-short blockquote{font-size:clamp(43px,3.25vw,54px);line-height:1.27}
+  .quote-game-shell .experience-stage .quote-paper.quote-medium blockquote{font-size:clamp(38px,2.9vw,48px);line-height:1.28}
+  .quote-game-shell .experience-stage .quote-paper.quote-long blockquote{font-size:clamp(33px,2.55vw,42px);line-height:1.3}
+  .quote-game-shell .experience-stage .answer-quote{font-size:clamp(29px,2.35vw,37px);line-height:1.25;margin:7px 0 3px;padding:9px 13px}
+  .quote-game-shell .experience-stage .source-citation{font-size:18px}
+  .quote-game-shell .experience-stage .history-card{overflow-y:auto;scrollbar-width:thin;scrollbar-color:#8f672c transparent}
+  .quote-game-shell .experience-stage .history-card p{font-size:18px;line-height:1.52}
+  .quote-game-shell .experience-stage .history-card h4{font-size:19px}
+  .quote-game-shell .experience-stage .wiki-card h3{font-size:20px}
+  .quote-game-shell .experience-stage .wiki-list a{grid-template-columns:30px 76px 1fr 40px;gap:12px;padding:3px 2px}
+  .quote-game-shell .experience-stage .wiki-number{width:28px;height:28px;font-size:13px}
+  .quote-game-shell .experience-stage .wiki-list img{width:76px;height:85%;max-height:none}
+  .quote-game-shell .experience-stage .wiki-list span b{font-size:18px;line-height:1.18}
+  .quote-game-shell .experience-stage .wiki-list span small{font-size:14px;line-height:1.25;margin-top:4px}
+  .quote-game-shell .experience-stage .wiki-w{font-size:32px}
+}
+
+@media(min-width:1261px) and (max-height:820px){
+  .quote-game-shell .experience-stage .quote-paper.quote-short blockquote{font-size:clamp(38px,2.85vw,47px)}
+  .quote-game-shell .experience-stage .quote-paper.quote-medium blockquote{font-size:clamp(34px,2.55vw,42px)}
+  .quote-game-shell .experience-stage .quote-paper.quote-long blockquote{font-size:clamp(29px,2.25vw,36px)}
+  .quote-game-shell .experience-stage .answer-quote{font-size:25px}
+  .quote-game-shell .experience-stage .source-citation{font-size:15px;padding:5px 8px}
+  .quote-game-shell .experience-stage .history-card p{font-size:15px;line-height:1.34}
+  .quote-game-shell .profile-bio{font-size:14.5px!important;line-height:1.32!important}
+  .quote-game-shell .person-profile h4{font-size:15px!important}.quote-game-shell .person-profile h4 span{font-size:11px!important}
+  .quote-game-shell .person-timeline{margin-top:6px}.quote-game-shell .person-timeline::before{top:24px}.quote-game-shell .person-timeline li::before{top:20px}.quote-game-shell .person-timeline time{height:19px;min-width:48px;font-size:10.5px}.quote-game-shell .person-timeline li>span{padding-top:10px;font-size:10.5px;line-height:1.16}.quote-game-shell .profile-source{margin-top:4px;font-size:10px}
+  .quote-game-shell .experience-stage .wiki-list a{grid-template-columns:25px 66px 1fr 32px;gap:8px;padding:2px 0}
+  .quote-game-shell .experience-stage .wiki-list img{width:66px;height:85%;max-height:none}.quote-game-shell .experience-stage .wiki-list span b{font-size:15px}.quote-game-shell .experience-stage .wiki-list span small{font-size:11.5px}.quote-game-shell .experience-stage .wiki-w{font-size:27px}
+}
+
+@media(max-width:700px){
+  .quote-game-shell .experience-stage .quote-paper.quote-short blockquote{font-size:38px}.quote-game-shell .experience-stage .quote-paper.quote-medium blockquote{font-size:34px}.quote-game-shell .experience-stage .quote-paper.quote-long blockquote{font-size:29px}
+  .quote-game-shell .source-citation{font-size:16px}.quote-game-shell .person-timeline{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:13px}.quote-game-shell .person-timeline::before{display:none}.quote-game-shell .person-timeline li::before{display:none}.quote-game-shell .wiki-list img{width:62px;height:85%}.quote-game-shell .wiki-list a{grid-template-columns:27px 62px 1fr 34px}.quote-game-shell .wiki-list span b{font-size:16px}.quote-game-shell .wiki-list span small{font-size:13px}
+}
