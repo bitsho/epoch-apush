@@ -1,0 +1,4544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HistoTrivia APUSH — AP U.S. History</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+
+
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1208;--ink2:#3d2e12;--ink3:#6b5132;
+  --paper:#f5eed8;--paper2:#ede4c6;--paper3:#e0d4ae;
+  --accent:#8b2800;--accent2:#b84a1a;--gold:#c49a2a;
+  --correct:#2d6a2d;--correct-bg:#d4edda;
+  --wrong:#8b2800;--wrong-bg:#f8d7da;
+  --border:rgba(26,18,8,0.2);--shadow:rgba(26,18,8,0.15);
+}
+body{background:var(--paper3);background-image:radial-gradient(ellipse at 20% 50%,rgba(196,154,42,.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(139,40,0,.05) 0%,transparent 50%);min-height:100vh;font-family:'EB Garamond',Georgia,serif;color:var(--ink);display:flex;flex-direction:column;align-items:center;}
+.page{width:100%;max-width:960px;padding:0 1rem 3rem;position:relative;z-index:1}
+
+/* HEADER */
+header{text-align:center;padding:1.5rem 0 1rem;border-bottom:1.5px double var(--border);margin-bottom:1rem}
+.masthead{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;letter-spacing:.04em;color:var(--accent);line-height:1;margin-bottom:.2rem}
+.tagline{font-size:.8rem;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;font-style:italic}
+
+/* FILTER TABS */
+.filter-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:1rem;padding:.6rem;background:var(--paper);border:1px solid var(--border);border-radius:4px}
+.filter-btn{font-family:'EB Garamond',serif;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border:1px solid var(--border);border-radius:2px;background:transparent;color:var(--ink3);cursor:pointer;transition:all .15s}
+.filter-btn:hover{background:var(--paper2);color:var(--ink)}
+.filter-btn.active{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.filter-count{font-size:.65rem;opacity:.7;margin-left:3px}
+
+/* HUD */
+.hud{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1.2rem;background:var(--paper);border:1px solid var(--border);border-radius:4px;margin-bottom:.8rem;box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.hud-score{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--accent)}
+.hud-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);display:block}
+.hud-streak{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;color:var(--gold)}
+.hearts{display:flex;gap:5px;align-items:center}
+.heart{width:20px;height:20px;transition:all .3s;filter:drop-shadow(0 1px 1px rgba(0,0,0,.2))}
+.heart.lost{opacity:.2;filter:grayscale(1)}
+
+/* PROGRESS */
+.progress-wrap{height:3px;background:var(--paper3);border-radius:2px;overflow:hidden;margin-bottom:.8rem;border:.5px solid var(--border)}
+.progress-bar{height:100%;background:var(--gold);transition:width .4s ease}
+
+/* CHALLENGE CARD */
+.challenge-area{text-align:center;margin-bottom:1.2rem}
+.challenge-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.5rem}
+.challenge-card{display:inline-flex;align-items:stretch;background:var(--paper);border:1px solid var(--border);border-radius:6px;max-width:560px;width:100%;box-shadow:0 2px 8px var(--shadow),inset 0 1px 0 rgba(255,255,255,.7);overflow:hidden;position:relative;text-align:left}
+.card-img-wrap{width:120px;flex-shrink:0;background:var(--paper2);overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:110px}
+.card-img{width:120px;height:100%;object-fit:cover;display:none}
+.card-img.loaded{display:block}
+.card-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;min-height:110px;background:linear-gradient(135deg,var(--paper2) 25%,var(--paper3) 50%,var(--paper2) 75%);background-size:200% 200%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.card-img-placeholder svg{opacity:.2;width:32px;height:32px}
+.card-body{padding:.8rem 1rem;flex:1}
+.card-title{font-family:'Playfair Display',serif;font-size:clamp(.9rem,2.2vw,1.1rem);font-weight:700;line-height:1.3;color:var(--ink)}
+.card-hint{font-size:.75rem;color:var(--ink3);margin-top:.3rem;font-style:italic}
+.card-year-mystery{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--accent2);margin-top:.4rem;letter-spacing:.12em}
+.card-region-badge{display:inline-block;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(139,40,0,.08);color:var(--accent);border-radius:2px;padding:1px 5px;margin-top:.3rem}
+
+/* INSTRUCTION */
+.instruction{text-align:center;font-style:italic;font-size:.88rem;color:var(--ink3);margin-bottom:.8rem;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* TIMELINE */
+.timeline-wrapper{overflow-x:auto;padding-bottom:1rem;-webkit-overflow-scrolling:touch}
+.timeline{display:flex;align-items:center;min-height:155px;padding:.5rem 1rem;position:relative;min-width:max-content}
+.timeline-line{position:absolute;top:50%;left:0;right:0;height:1.5px;background:linear-gradient(to right,transparent,var(--ink3) 5%,var(--ink3) 95%,transparent);transform:translateY(-50%);pointer-events:none}
+
+/* TL CARD */
+.tl-card{position:relative;z-index:2;background:var(--paper);border:1px solid var(--border);border-radius:5px;width:115px;text-align:center;font-size:.72rem;box-shadow:0 1px 4px var(--shadow);flex-shrink:0;transition:transform .2s,box-shadow .2s;overflow:hidden}
+.tl-thumb{width:115px;height:60px;object-fit:cover;display:block;background:var(--paper2)}
+.tl-thumb-ph{width:115px;height:60px;background:var(--paper2);display:flex;align-items:center;justify-content:center}
+.tl-body{padding:.35rem .4rem}
+.tl-card-year{font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;color:var(--accent);display:block;margin-bottom:1px}
+.tl-card-title{font-size:.65rem;line-height:1.25;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tl-card-wiki{display:block;margin-top:3px;font-size:.6rem;color:var(--accent2);text-decoration:none;font-style:italic}
+.tl-card-wiki:hover{text-decoration:underline}
+.tl-card.correct{border-color:var(--correct);animation:correctFlash .5s ease}
+.tl-card.wrong{border-color:var(--wrong);background:var(--wrong-bg);animation:shake .4s ease}
+@keyframes correctFlash{0%{transform:scale(1.12);box-shadow:0 0 0 4px rgba(45,106,45,.3)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+/* INSERT ZONE */
+.insert-zone{width:32px;height:80px;flex-shrink:0;position:relative;z-index:3;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:width .15s}
+.insert-zone:hover{width:48px}
+.insert-btn{width:24px;height:24px;border-radius:50%;background:var(--paper);border:1.5px solid var(--accent2);color:var(--accent2);font-size:1rem;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;box-shadow:0 1px 3px var(--shadow);pointer-events:none}
+.insert-zone:hover .insert-btn{background:var(--accent2);color:white;transform:scale(1.15);box-shadow:0 2px 6px rgba(139,40,0,.3)}
+.insert-zone.disabled{pointer-events:none;opacity:.3}
+
+/* FEEDBACK */
+.feedback{position:fixed;top:70px;left:50%;transform:translateX(-50%);padding:.6rem 1.4rem;border-radius:4px;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s;z-index:100;white-space:nowrap;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.feedback.correct{background:#eaf5ea;color:var(--correct);border:1px solid var(--correct);opacity:1}
+.feedback.wrong{background:var(--wrong-bg);color:var(--wrong);border:1px solid var(--wrong);opacity:1}
+.feedback.hide{opacity:0}
+
+/* START SCREEN */
+.overlay{position:fixed;inset:0;background:rgba(26,18,8,.8);z-index:200;display:flex;align-items:center;justify-content:center}
+.overlay.hide{display:none}
+.overlay-box{background:var(--paper);border:2px solid var(--border);border-radius:8px;padding:2rem 2.5rem;max-width:480px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.4);position:relative;max-height:90vh;overflow-y:auto}
+.overlay-box::before{content:'';position:absolute;inset:8px;border:.5px solid rgba(196,154,42,.4);border-radius:4px;pointer-events:none}
+.overlay-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--accent);margin-bottom:.8rem}
+.start-rules{font-size:.88rem;line-height:1.8;color:var(--ink2);margin-bottom:1.2rem;text-align:left}
+.start-rules li{margin-bottom:.2rem}
+.btn-primary{background:var(--accent);color:var(--paper);border:none;cursor:pointer;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;padding:.65rem 2rem;border-radius:4px;letter-spacing:.05em;transition:background .2s,transform .1s;margin:.3rem}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--accent);border:1px solid var(--accent);cursor:pointer;font-family:'Playfair Display',serif;font-size:1rem;padding:.6rem 1.5rem;border-radius:4px;transition:all .2s;margin:.3rem}
+.btn-secondary:hover{background:var(--paper2)}
+
+/* GAME OVER */
+.gameover-score{font-size:3rem;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink);margin:.4rem 0}
+.gameover-sub{font-size:.95rem;color:var(--ink3);font-style:italic;margin-bottom:1.2rem}
+
+/* REVIEW SCREEN */
+.review-screen{display:none;position:fixed;inset:0;background:var(--paper3);z-index:300;overflow-y:auto}
+.review-screen.show{display:block}
+.review-header{background:var(--paper);border-bottom:1.5px double var(--border);padding:1.2rem;text-align:center;position:sticky;top:0;z-index:10}
+.review-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--accent)}
+.review-stats{font-size:.85rem;color:var(--ink3);font-style:italic;margin-top:.2rem}
+.review-content{max-width:960px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.review-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.review-card{background:var(--paper);border:1px solid var(--border);border-radius:5px;overflow:hidden;box-shadow:0 1px 4px var(--shadow)}
+.review-card.correct-card{border-color:var(--correct)}
+.review-card.wrong-card{border-color:var(--wrong);opacity:.65}
+.review-card img{width:100%;height:80px;object-fit:cover;display:block}
+.review-card-ph{width:100%;height:80px;background:var(--paper2);display:flex;align-items:center;justify-content:center}
+.review-card-body{padding:.4rem .5rem}
+.review-card-year{font-family:'Playfair Display',serif;font-size:.85rem;font-weight:700;color:var(--accent);display:block}
+.review-card-title{font-size:.65rem;line-height:1.25;color:var(--ink2);margin:.1rem 0}
+.review-card-wiki{font-size:.6rem;color:var(--accent2);text-decoration:none}
+.review-card-wiki:hover{text-decoration:underline}
+.review-bottom{text-align:center;padding:2rem 1rem;background:var(--paper);border-top:1.5px double var(--border);position:sticky;bottom:0}
+
+/* TIMELINE LINE IN REVIEW */
+.review-tl-wrap{overflow-x:auto;padding:1rem 0 2rem;margin-bottom:1.5rem}
+.review-tl{display:flex;align-items:flex-start;gap:8px;min-width:max-content;padding:0 1rem;position:relative}
+.review-tl::before{content:'';position:absolute;top:68px;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--ink3) 3%,var(--ink3) 97%,transparent)}
+.review-tl-card{width:110px;flex-shrink:0;text-align:center;position:relative}
+.review-tl-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);margin:0 auto;position:relative;z-index:2;margin-bottom:4px}
+.review-tl-dot.ok{background:var(--correct)}
+.review-tl-dot.bad{background:var(--wrong)}
+.review-tl-img{width:90px;height:55px;object-fit:cover;border-radius:3px;border:1px solid var(--border);margin:0 auto;display:block}
+.review-tl-img-ph{width:90px;height:55px;background:var(--paper2);border-radius:3px;border:1px solid var(--border);margin:0 auto}
+.review-tl-year{font-family:'Playfair Display',serif;font-size:.75rem;font-weight:700;color:var(--accent);display:block;margin-top:2px}
+.review-tl-name{font-size:.58rem;line-height:1.2;color:var(--ink2);margin-top:1px}
+.review-tl-link{font-size:.55rem;color:var(--accent2);text-decoration:none}
+
+.section-label{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--ink2);margin:1.2rem 0 .6rem;border-bottom:1px solid var(--border);padding-bottom:.3rem}
+
+/* difficulty badges */
+.diff-badge{display:inline-block;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-top:2px;font-weight:600}
+.diff-bronze{background:#cd7f3222;color:#cd7f32}.diff-silver{background:#c0c0c022;color:#808080}.diff-gold{background:#ffd70022;color:#b8860b}.diff-platinum{background:#e5e4e222;color:#6e6e6e}.diff-diamond{background:#b9f2ff22;color:#0097a7}
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:.4rem}
+.diff-grid .filter-btn{font-size:.78rem;padding:5px 8px}
+.lang-row{display:flex;gap:6px;margin-bottom:.8rem}
+.setup-section{margin-bottom:.9rem;text-align:left}
+.setup-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.4rem;display:block}
+
+/* v5 overrides */
+body{background:var(--paper3)}
+.page{max-width:1280px;padding:0 1.5rem 3rem}
+header{padding:1.8rem 0 1.2rem}
+.masthead{font-size:clamp(2.2rem,5vw,3.6rem)}
+.filter-bar{flex-wrap:wrap;gap:5px;padding:.7rem 1rem;justify-content:flex-start}
+.filter-btn{font-size:.78rem;padding:5px 11px;letter-spacing:.05em}
+.hud{padding:.9rem 1.5rem;margin-bottom:.9rem}
+.hud-score{font-size:1.6rem}
+.challenge-card{max-width:680px}
+.card-img-wrap{width:160px}
+.card-img-placeholder{min-height:130px}
+.card-body{padding:1rem 1.2rem}
+.card-title{font-size:clamp(1rem,2.5vw,1.3rem)}
+.card-year-mystery{font-size:1.7rem}
+.tl-card{width:140px}
+.tl-thumb{width:140px;height:72px}
+.tl-thumb-ph{width:140px;height:72px}
+.tl-card-year{font-size:1rem}
+.tl-card-title{font-size:.72rem}
+.timeline{min-height:175px;padding:.6rem 1.2rem}
+.hud{display:flex;gap:1.5rem;align-items:center;justify-content:space-between}
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:.4rem}
+.diff-grid .filter-btn{font-size:.78rem;padding:6px 8px}
+.lang-row{display:flex;gap:6px;margin-bottom:.8rem}
+.setup-section{margin-bottom:.9rem;text-align:left}
+.setup-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.4rem;display:block}
+.overlay-box{max-width:540px}
+
+/* AP version overrides */
+body{background:var(--paper3)}
+.page{max-width:1280px;padding:0 1.5rem 3rem}
+.masthead{font-size:clamp(1.8rem,4vw,3rem)}
+.masthead-sub{font-size:.85rem;color:var(--ink3);font-style:italic;letter-spacing:.05em;margin-top:-.3rem;margin-bottom:.5rem}
+.filter-bar{flex-wrap:wrap;gap:4px;padding:.6rem .8rem;justify-content:flex-start}
+.filter-btn{font-size:.72rem;padding:4px 9px}
+.filter-section-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);width:100%;margin-top:.4rem;margin-bottom:-.1rem}
+.hud{padding:.8rem 1.2rem;margin-bottom:.8rem;display:flex;gap:1.2rem;align-items:center;justify-content:space-between}
+.challenge-card{max-width:680px}
+.card-img-wrap{width:160px}
+.card-img-placeholder{min-height:130px}
+.card-body{padding:1rem 1.2rem}
+.card-title{font-size:clamp(.95rem,2.5vw,1.25rem)}
+.card-year-mystery{font-size:1.6rem}
+.card-region-badge{font-size:.65rem!important;padding:2px 8px!important;max-width:100%;white-space:normal;text-align:center;line-height:1.4}
+.tl-card{width:140px}
+.tl-thumb,.tl-thumb-ph{width:140px;height:68px}
+.tl-card-year{font-size:.95rem}
+.tl-card-title{font-size:.68rem}
+.timeline{min-height:160px;padding:.5rem 1rem}
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:.4rem}
+.diff-grid .filter-btn{font-size:.75rem;padding:5px 6px}
+.lang-row{display:flex;gap:6px;margin-bottom:.7rem}
+.setup-section{margin-bottom:.8rem;text-align:left}
+.setup-label{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.35rem;display:block}
+.overlay-box{max-width:560px}
+.unit-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:.2rem}
+.unit-grid .filter-btn{font-size:.65rem;padding:4px 5px;text-align:left;line-height:1.3}
+
+/* BACKGROUND MUSIC CONTROL */
+.music-control{
+  position:fixed;top:14px;right:14px;z-index:420;
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;
+  background:rgba(245,238,216,.94);
+  border:1px solid var(--border);border-radius:6px;
+  box-shadow:0 2px 10px rgba(26,18,8,.18);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  font-family:'EB Garamond',Georgia,serif;color:var(--ink2);
+}
+.music-toggle{
+  display:inline-flex;align-items:center;gap:5px;
+  border:1px solid var(--border);border-radius:4px;
+  background:var(--paper);color:var(--ink2);
+  padding:4px 8px;cursor:pointer;
+  font:600 .72rem 'EB Garamond',Georgia,serif;
+  white-space:nowrap;transition:background .15s,color .15s,border-color .15s;
+}
+.music-toggle:hover{background:var(--paper2)}
+.music-toggle.on{color:var(--accent);border-color:rgba(139,40,0,.35)}
+.music-icon{font-size:.9rem;line-height:1}
+.music-volume-wrap{display:flex;align-items:center;gap:5px}
+.music-volume-label{font-size:.67rem;color:var(--ink3);white-space:nowrap}
+.music-volume{
+  width:92px;height:4px;accent-color:var(--accent);
+  cursor:pointer;
+}
+@media (max-width:600px){
+  .music-control{top:8px;right:8px;padding:6px 7px;gap:5px}
+  .music-toggle{padding:4px 6px}
+  .music-toggle-text,.music-volume-label{display:none}
+  .music-volume{width:70px}
+}
+
+/* EPOCH integration: compact filters, larger gameplay and review surfaces */
+.page{max-width:1480px;padding-inline:2rem}
+.filter-bar.unit-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px 6px;padding:.42rem .55rem;margin-bottom:.62rem}
+.filter-bar.unit-grid .filter-section-label{grid-column:1/-1;width:auto;margin:0 0 1px;font-size:.56rem;line-height:1.1}
+.filter-bar.unit-grid .filter-btn{min-width:0;padding:3px 5px;font-size:.64rem;line-height:1.15;text-align:center;white-space:nowrap}
+.hud{padding:1rem 1.55rem}
+.hud-score{font-size:1.85rem}
+.hud-label{font-size:.76rem}
+.hud-streak{font-size:1.35rem}
+.challenge-label{font-size:.78rem}
+.challenge-card{max-width:900px}
+.card-img-wrap{width:220px;min-height:175px}
+.card-img{width:220px}
+.card-img-placeholder{min-height:175px}
+.card-body{padding:1.3rem 1.55rem}
+.card-title{font-size:clamp(1.3rem,2.7vw,1.7rem);line-height:1.3}
+.card-hint{font-size:1rem;line-height:1.48}
+.card-year-mystery{font-size:2.15rem}
+.card-region-badge{font-size:.8rem;padding:4px 9px}
+.instruction{font-size:1.05rem}
+.timeline{min-height:238px;padding:.9rem 1.4rem}
+.tl-card{width:184px;font-size:.96rem}
+.tl-thumb,.tl-thumb-ph{width:184px;height:96px}
+.tl-card-year{font-size:1.3rem;margin-bottom:4px}
+.tl-card-title{font-size:.96rem;line-height:1.34;-webkit-line-clamp:3}
+.tl-card-wiki{font-size:.78rem}
+.insert-zone{width:44px}
+.insert-btn{width:34px;height:34px;font-size:1.35rem}
+.review-content{max-width:1320px}
+.review-title{font-size:2rem}
+.review-stats{font-size:1rem}
+.section-label{font-size:1.35rem}
+.review-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.review-card img,.review-card-ph{height:138px!important}
+.review-card-body{padding:.78rem .9rem}
+.review-card-year{font-size:1.18rem}
+.review-card-title{font-size:.94rem;line-height:1.38}
+.review-card-wiki{font-size:.78rem}
+.review-tl-card{width:162px}
+.review-tl-img,.review-tl-img-ph{width:132px;height:82px}
+.review-tl-year{font-size:1.05rem}
+.review-tl-name{font-size:.84rem;line-height:1.32}
+.review-tl-link{font-size:.74rem}
+@media (max-width:600px){
+  .page{padding-inline:.75rem}
+  .filter-bar.unit-grid{display:flex;flex-wrap:nowrap;align-items:center;overflow-x:auto;padding:.4rem;gap:4px}
+  .filter-bar.unit-grid .filter-section-label{display:none}
+  .filter-bar.unit-grid .filter-btn{flex:0 0 auto;padding:5px 8px;font-size:.64rem}
+  .card-img-wrap,.card-img{width:150px}
+  .card-img-wrap,.card-img-placeholder{min-height:140px}
+  .card-body{padding:.95rem 1rem}
+  .card-title{font-size:1.16rem}
+  .card-hint{font-size:.84rem}
+  .card-year-mystery{font-size:1.7rem}
+  .timeline{min-height:205px;padding:.7rem .8rem}
+  .tl-card{width:148px}
+  .tl-thumb,.tl-thumb-ph{width:148px;height:78px}
+  .tl-card-year{font-size:1.08rem}
+  .tl-card-title{font-size:.82rem}
+  .review-tl-card{width:138px}
+  .review-grid{grid-template-columns:repeat(auto-fill,minmax(165px,1fr))}
+}
+
+</style>
+</head>
+<body>
+
+<audio id="bg-music" loop preload="auto" playsinline
+  src="/api/timeline-soundtrack"></audio>
+<div class="music-control" id="music-control" aria-label="Background music controls">
+  <button class="music-toggle on" id="music-toggle" type="button" onclick="toggleBackgroundMusic()" aria-pressed="true">
+    <span class="music-icon" id="music-icon">♫</span>
+    <span class="music-toggle-text" id="music-toggle-text">Music On</span>
+  </button>
+  <div class="music-volume-wrap">
+    <span class="music-volume-label" id="music-volume-label">Volume</span>
+    <input class="music-volume" id="music-volume" type="range" min="0" max="100" step="1" value="28"
+      oninput="setBackgroundMusicVolume(this.value)" aria-label="Background music volume">
+  </div>
+</div>
+
+
+<!-- START SCREEN -->
+<div class="overlay" id="startscreen">
+  <div class="overlay-box">
+    <div class="overlay-title">HistoTrivia APUSH</div>
+    <p style="font-style:italic;color:var(--ink3);margin-bottom:1rem;font-size:.85rem" id="ss-sub">AP U.S. History — Practice placing key events in order</p>
+
+    <div class="setup-section">
+      <span class="setup-label" id="ss-lang-lbl">🌐 Language / 语言</span>
+      <div class="lang-row">
+        <button class="filter-btn active" id="lang-en" onclick="setLang('en')">🇬🇧 English</button>
+        <button class="filter-btn" id="lang-zh" onclick="setLang('zh')">🇨🇳 中文</button>
+      </div>
+    </div>
+
+    <div class="setup-section">
+      <span class="setup-label" id="ss-diff-lbl">⚔️ Difficulty — pool size</span>
+      <div class="diff-grid">
+        <button class="filter-btn active" id="diff-bronze" onclick="setDiff('bronze')">🥉 Bronze</button>
+        <button class="filter-btn" id="diff-silver" onclick="setDiff('silver')">🥈 Silver</button>
+        <button class="filter-btn" id="diff-gold" onclick="setDiff('gold')">🥇 Gold</button>
+        <button class="filter-btn" id="diff-platinum" onclick="setDiff('platinum')">💎 Platinum</button>
+        <button class="filter-btn" id="diff-diamond" style="grid-column:1/-1" onclick="setDiff('diamond')">💠 Diamond (All)</button>
+      </div>
+      <div id="diff-desc" style="font-size:.67rem;color:var(--ink3);font-style:italic;text-align:center;min-height:1.2em"></div>
+    </div>
+
+    <ul class="start-rules" id="ss-rules" style="font-size:.8rem">
+      <li>📜 A card appears — place it correctly on the timeline</li>
+      <li>📍 Click <strong>+</strong> to insert between cards</li>
+      <li>✅ Correct: year revealed, Wikipedia link appears</li>
+      <li>❌ Wrong: lose a life (3 total)</li>
+      <li>📚 Filter by AP unit for targeted practice</li>
+      <li>🏛 Review your full timeline after the game</li>
+    </ul>
+    <p style="font-size:.7rem;color:var(--ink3);font-style:italic;margin:.5rem 0 .8rem" id="ss-count">300+ events aligned to AP U.S. History CED</p>
+    <button class="btn-primary" id="ss-begin" onclick="startGame()">Begin Practice ›</button>
+  </div>
+</div>
+
+<!-- GAME OVER -->
+<div class="overlay hide" id="gameover">
+  <div class="overlay-box">
+    <div class="overlay-title" id="go-title">Practice Complete</div>
+    <div class="gameover-score" id="final-score">0</div>
+    <div class="gameover-sub" id="final-msg"></div>
+    <button class="btn-primary" id="go-review" onclick="showReview()">Review Timeline ›</button><br>
+    <button class="btn-secondary" id="go-analytics" onclick="openAnalytics()">Learning Analytics</button><br>
+    <button class="btn-secondary" id="go-again" onclick="showStartScreen()">Practice Again</button>
+  </div>
+</div>
+
+<!-- REVIEW SCREEN -->
+<div class="review-screen" id="review-screen">
+  <div class="review-header">
+    <div class="review-title" id="rev-title">Your Timeline</div>
+    <div class="review-stats" id="review-stats"></div>
+  </div>
+  <div class="review-content">
+    <div class="section-label" id="rev-lbl1">Events you placed — in order</div>
+    <div class="review-tl-wrap"><div class="review-tl" id="review-tl"></div></div>
+    <div class="section-label" id="rev-lbl2">All placed events — gallery view</div>
+    <div class="review-grid" id="review-grid"></div>
+  </div>
+  <div class="review-bottom">
+    <button class="btn-primary" id="rev-again" onclick="showStartScreen()">Practice Again ›</button>
+    <button class="btn-secondary" id="rev-back" onclick="hideReview()">Back to Results</button>
+  </div>
+</div>
+
+<div class="page">
+  <header>
+    <div class="masthead">HistoTrivia APUSH</div>
+    <div class="masthead-sub">AP U.S. History — AP CED Aligned</div>
+  </header>
+
+  <!-- AP Unit Filter -->
+  <div class="filter-bar unit-grid" id="filter-bar">
+    <span class="filter-section-label">📚 Filter by AP Unit</span>
+    <button class="filter-btn active" data-unit="all" onclick="setUnit('all')">All Units</button>
+    <button class="filter-btn" data-unit="u1" onclick="setUnit('u1')">Unit 1 · 1491–1607</button>
+    <button class="filter-btn" data-unit="u2" onclick="setUnit('u2')">Unit 2 · 1607–1754</button>
+    <button class="filter-btn" data-unit="u3" onclick="setUnit('u3')">Unit 3 · 1754–1800</button>
+    <button class="filter-btn" data-unit="u4" onclick="setUnit('u4')">Unit 4 · 1800–1848</button>
+    <button class="filter-btn" data-unit="u5" onclick="setUnit('u5')">Unit 5 · 1844–1877</button>
+    <button class="filter-btn" data-unit="u6" onclick="setUnit('u6')">Unit 6 · 1865–1898</button>
+    <button class="filter-btn" data-unit="u7" onclick="setUnit('u7')">Unit 7 · 1890–1945</button>
+    <button class="filter-btn" data-unit="u8" onclick="setUnit('u8')">Unit 8 · 1945–1980</button>
+    <button class="filter-btn" data-unit="u9" onclick="setUnit('u9')">Unit 9 · 1980–Present</button>
+  </div>
+
+  <div class="hud">
+    <div><span class="hud-label" id="hud-score-lbl">Score</span><span class="hud-score" id="score">0</span></div>
+    <div><span class="hud-label" id="hud-pool-lbl">Pool</span><span class="hud-streak" id="pool-size" style="font-size:.9rem">—</span></div>
+    <div><span class="hud-label" id="hud-streak-lbl">Streak</span><span class="hud-streak" id="streak">—</span></div>
+    <div><span class="hud-label" id="hud-lives-lbl">Lives</span><div class="hearts" id="hearts"></div></div>
+  </div>
+
+  <div class="progress-wrap"><div class="progress-bar" id="progress" style="width:0%"></div></div>
+
+  <div class="challenge-area">
+    <div class="challenge-label" id="challenge-label">Where does this event belong on the timeline?</div>
+    <div class="challenge-card">
+      <div class="card-img-wrap">
+        <div class="card-img-placeholder" id="card-img-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <img class="card-img" id="card-img" alt="" src="">
+      </div>
+      <div class="card-body">
+        <div class="card-title" id="card-title">Loading…</div>
+        <div class="card-hint" id="card-hint"></div>
+        <div class="card-year-mystery">? ? ? ?</div>
+        <span class="card-region-badge" id="card-region-badge"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="instruction" id="instruction">Click the <strong>+</strong> button to insert this event</div>
+
+  <div class="timeline-wrapper">
+    <div class="timeline" id="timeline"><div class="timeline-line"></div></div>
+  </div>
+</div>
+
+<div class="feedback" id="feedback"></div>
+
+<script>
+const RAW=[
+  [
+    1492,
+    "Columbus's first voyage",
+    "Spanish contact with the Caribbean begins",
+    "Voyages of Christopher Columbus",
+    "us",
+    3,
+    "哥伦布首次航行",
+    "哥伦布首次航行的背景与影响",
+    "u1"
+  ],
+  [
+    1494,
+    "Treaty of Tordesillas",
+    "Spain and Portugal divide the non-European world",
+    "Treaty of Tordesillas",
+    "us",
+    5,
+    "托德西利亚斯条约",
+    "托德西利亚斯条约的背景与影响",
+    "u1"
+  ],
+  [
+    1513,
+    "Ponce de León reaches Florida",
+    "Early Spanish exploration of North America",
+    "Juan Ponce de León",
+    "us",
+    3,
+    "庞塞·德莱昂抵达佛罗里达",
+    "庞塞·德莱昂抵达佛罗里达的背景与影响",
+    "u1"
+  ],
+  [
+    1519,
+    "Cortés enters Tenochtitlan",
+    "Spanish conquest of the Aztec Empire begins",
+    "Hernán Cortés",
+    "us",
+    3,
+    "科尔特斯进入特诺奇蒂特兰",
+    "科尔特斯进入特诺奇蒂特兰的背景与影响",
+    "u1"
+  ],
+  [
+    1521,
+    "Fall of Tenochtitlan",
+    "Aztec capital falls to Spain",
+    "Fall of Tenochtitlan",
+    "us",
+    3,
+    "特诺奇蒂特兰陷落",
+    "特诺奇蒂特兰陷落的背景与影响",
+    "u1"
+  ],
+  [
+    1532,
+    "Pizarro conquers the Inca Empire",
+    "Spanish expansion in South America",
+    "Francisco Pizarro",
+    "us",
+    3,
+    "皮萨罗征服印加帝国",
+    "皮萨罗征服印加帝国的背景与影响",
+    "u1"
+  ],
+  [
+    1539,
+    "De Soto expedition",
+    "Spanish exploration of the Southeast",
+    "Hernando de Soto",
+    "us",
+    3,
+    "德索托远征",
+    "德索托远征的背景与影响",
+    "u1"
+  ],
+  [
+    1540,
+    "Coronado expedition",
+    "Spanish search for gold in the Southwest",
+    "Francisco Vázquez de Coronado",
+    "us",
+    3,
+    "科罗纳多远征",
+    "科罗纳多远征的背景与影响",
+    "u1"
+  ],
+  [
+    1542,
+    "New Laws challenge encomienda",
+    "Crown limits harsh labor practices",
+    "New Laws",
+    "us",
+    3,
+    "新法限制恩科米恩达制度",
+    "新法限制恩科米恩达制度的背景与影响",
+    "u1"
+  ],
+  [
+    1550,
+    "Valladolid Debate",
+    "Debate over treatment of Indigenous peoples",
+    "Valladolid debate",
+    "us",
+    3,
+    "巴利亚多利德辩论",
+    "巴利亚多利德辩论的背景与影响",
+    "u1"
+  ],
+  [
+    1565,
+    "St. Augustine founded",
+    "Oldest permanent European settlement in what becomes the U.S.",
+    "St. Augustine, Florida",
+    "us",
+    4,
+    "圣奥古斯丁建立",
+    "圣奥古斯丁建立的背景与影响",
+    "u1"
+  ],
+  [
+    1585,
+    "Roanoke Colony established",
+    "English colonial experiment on the Atlantic coast",
+    "Roanoke Colony",
+    "us",
+    3,
+    "罗阿诺克殖民地建立",
+    "罗阿诺克殖民地建立的背景与影响",
+    "u1"
+  ],
+  [
+    1598,
+    "Oñate expedition to New Mexico",
+    "Spanish settlement expands in the Southwest",
+    "Juan de Oñate",
+    "us",
+    3,
+    "奥尼亚特远征新墨西哥",
+    "奥尼亚特远征新墨西哥的背景与影响",
+    "u1"
+  ],
+  [
+    1607,
+    "Jamestown founded",
+    "First lasting English settlement in Virginia",
+    "Jamestown, Virginia",
+    "us",
+    4,
+    "詹姆斯敦建立",
+    "詹姆斯敦建立的背景与影响",
+    "u2"
+  ],
+  [
+    1609,
+    "Starving Time begins at Jamestown",
+    "Near collapse of the Chesapeake colony",
+    "Starving Time",
+    "us",
+    3,
+    "詹姆斯敦“饥荒时期”开始",
+    "詹姆斯敦“饥荒时期”开始的背景与影响",
+    "u2"
+  ],
+  [
+    1618,
+    "Headright system begins in Virginia",
+    "Labor and land policy attract settlers",
+    "Headright",
+    "us",
+    4,
+    "弗吉尼亚人头权制度开始",
+    "弗吉尼亚人头权制度开始的背景与影响",
+    "u2"
+  ],
+  [
+    1619,
+    "First Africans arrive in Virginia",
+    "African slavery takes root in English North America",
+    "Slavery in the United States",
+    "us",
+    3,
+    "首批非洲人抵达弗吉尼亚",
+    "首批非洲人抵达弗吉尼亚的背景与影响",
+    "u2"
+  ],
+  [
+    1619,
+    "House of Burgesses convenes",
+    "Early representative government in Virginia",
+    "House of Burgesses",
+    "us",
+    3,
+    "弗吉尼亚市民议会召开",
+    "弗吉尼亚市民议会召开的背景与影响",
+    "u2"
+  ],
+  [
+    1620,
+    "Mayflower Compact",
+    "Self-government in New England begins",
+    "Mayflower Compact",
+    "us",
+    5,
+    "五月花号公约",
+    "五月花号公约的背景与影响",
+    "u2"
+  ],
+  [
+    1620,
+    "Plymouth Colony founded",
+    "Pilgrim settlement in New England",
+    "Plymouth Colony",
+    "us",
+    4,
+    "普利茅斯殖民地建立",
+    "普利茅斯殖民地建立的背景与影响",
+    "u2"
+  ],
+  [
+    1630,
+    "Massachusetts Bay Colony founded",
+    "Puritan migration reshapes New England",
+    "Massachusetts Bay Colony",
+    "us",
+    4,
+    "马萨诸塞湾殖民地建立",
+    "马萨诸塞湾殖民地建立的背景与影响",
+    "u2"
+  ],
+  [
+    1636,
+    "Harvard College founded",
+    "Early colonial higher education",
+    "Harvard University",
+    "us",
+    4,
+    "哈佛学院建立",
+    "哈佛学院建立的背景与影响",
+    "u2"
+  ],
+  [
+    1636,
+    "Rhode Island founded",
+    "Religious toleration in a new colony",
+    "Colony of Rhode Island and Providence Plantations",
+    "us",
+    4,
+    "罗德岛殖民地建立",
+    "罗德岛殖民地建立的背景与影响",
+    "u2"
+  ],
+  [
+    1636,
+    "Pequot War begins",
+    "Violent conflict between settlers and Native peoples",
+    "Pequot War",
+    "us",
+    5,
+    "佩科特战争开始",
+    "佩科特战争开始的背景与影响",
+    "u2"
+  ],
+  [
+    1634,
+    "Maryland colony founded",
+    "Catholic refuge and proprietary colony",
+    "Province of Maryland",
+    "us",
+    4,
+    "马里兰殖民地建立",
+    "马里兰殖民地建立的背景与影响",
+    "u2"
+  ],
+  [
+    1649,
+    "Maryland Toleration Act",
+    "Limited religious freedom in colonial Maryland",
+    "Maryland Toleration Act",
+    "us",
+    5,
+    "马里兰宽容法",
+    "马里兰宽容法的背景与影响",
+    "u2"
+  ],
+  [
+    1664,
+    "English conquest of New Netherland",
+    "New York passes from Dutch to English rule",
+    "New Netherland",
+    "us",
+    3,
+    "英格兰征服新尼德兰",
+    "英格兰征服新尼德兰的背景与影响",
+    "u2"
+  ],
+  [
+    1670,
+    "Charlestown founded",
+    "Carolina becomes a new plantation society",
+    "Charleston, South Carolina",
+    "us",
+    4,
+    "查尔斯顿建立",
+    "查尔斯顿建立的背景与影响",
+    "u2"
+  ],
+  [
+    1675,
+    "King Philip's War begins",
+    "Major Native resistance to New England expansion",
+    "King Philip's War",
+    "us",
+    5,
+    "菲利普国王战争开始",
+    "菲利普国王战争开始的背景与影响",
+    "u2"
+  ],
+  [
+    1676,
+    "Bacon's Rebellion",
+    "Frontier unrest exposes colonial tensions",
+    "Bacon's Rebellion",
+    "us",
+    5,
+    "培根叛乱",
+    "培根叛乱的背景与影响",
+    "u2"
+  ],
+  [
+    1681,
+    "Pennsylvania founded",
+    "Quaker colony built on tolerance",
+    "Province of Pennsylvania",
+    "us",
+    4,
+    "宾夕法尼亚殖民地建立",
+    "宾夕法尼亚殖民地建立的背景与影响",
+    "u2"
+  ],
+  [
+    1682,
+    "William Penn's Frame of Government",
+    "Political model for Pennsylvania",
+    "Frame of Government of Pennsylvania",
+    "us",
+    3,
+    "威廉·佩恩政府框架",
+    "威廉·佩恩政府框架的背景与影响",
+    "u2"
+  ],
+  [
+    1686,
+    "Dominion of New England established",
+    "Imperial consolidation sparks colonial resentment",
+    "Dominion of New England",
+    "us",
+    3,
+    "新英格兰自治领成立",
+    "新英格兰自治领成立的背景与影响",
+    "u2"
+  ],
+  [
+    1688,
+    "Glorious Revolution",
+    "Political change in England affects the colonies",
+    "Glorious Revolution",
+    "us",
+    5,
+    "光荣革命",
+    "光荣革命的背景与影响",
+    "u2"
+  ],
+  [
+    1692,
+    "Salem witch trials begin",
+    "Fear and social conflict in Puritan New England",
+    "Salem witch trials",
+    "us",
+    3,
+    "塞勒姆女巫审判开始",
+    "塞勒姆女巫审判开始的背景与影响",
+    "u2"
+  ],
+  [
+    1705,
+    "Virginia Slave Codes",
+    "Legal foundation of racial slavery",
+    "Virginia slave codes",
+    "us",
+    3,
+    "弗吉尼亚奴隶法典",
+    "弗吉尼亚奴隶法典的背景与影响",
+    "u2"
+  ],
+  [
+    1733,
+    "Molasses Act",
+    "Colonial trade regulations create friction with Britain",
+    "Molasses Act",
+    "us",
+    5,
+    "糖蜜法",
+    "糖蜜法的背景与影响",
+    "u2"
+  ],
+  [
+    1739,
+    "Stono Rebellion",
+    "Major slave uprising in South Carolina",
+    "Stono Rebellion",
+    "us",
+    5,
+    "斯托诺叛乱",
+    "斯托诺叛乱的背景与影响",
+    "u2"
+  ],
+  [
+    1735,
+    "Zenger trial decided",
+    "Press freedom and colonial politics",
+    "John Peter Zenger",
+    "us",
+    3,
+    "曾格审判作出判决",
+    "曾格审判作出判决的背景与影响",
+    "u2"
+  ],
+  [
+    1749,
+    "Ohio Company and western claims",
+    "Competition for the trans-Appalachian West",
+    "Ohio Company",
+    "us",
+    3,
+    "俄亥俄公司与西部土地主张",
+    "俄亥俄公司与西部土地主张的背景与影响",
+    "u2"
+  ],
+  [
+    1754,
+    "French and Indian War begins",
+    "Imperial war over the Ohio Valley",
+    "French and Indian War",
+    "us",
+    5,
+    "法印战争开始",
+    "法印战争开始的背景与影响",
+    "u3"
+  ],
+  [
+    1754,
+    "Albany Congress",
+    "Colonial cooperation on the eve of war",
+    "Albany Congress",
+    "us",
+    3,
+    "奥尔巴尼会议",
+    "奥尔巴尼会议的背景与影响",
+    "u3"
+  ],
+  [
+    1754,
+    "Albany Plan of Union",
+    "Early proposal for colonial unity",
+    "Albany Plan",
+    "us",
+    3,
+    "奥尔巴尼联盟计划",
+    "奥尔巴尼联盟计划的背景与影响",
+    "u3"
+  ],
+  [
+    1763,
+    "Treaty of Paris ends the French and Indian War",
+    "Britain gains North American dominance",
+    "Treaty of Paris (1763)",
+    "us",
+    5,
+    "巴黎条约结束法印战争",
+    "巴黎条约结束法印战争的背景与影响",
+    "u3"
+  ],
+  [
+    1763,
+    "Proclamation Line of 1763",
+    "Britain restricts westward settlement",
+    "Royal Proclamation of 1763",
+    "us",
+    3,
+    "1763年公告线",
+    "1763年公告线的背景与影响",
+    "u3"
+  ],
+  [
+    1765,
+    "Stamp Act",
+    "Parliament taxes colonial paper goods",
+    "Stamp Act 1765",
+    "us",
+    5,
+    "印花税法",
+    "印花税法的背景与影响",
+    "u3"
+  ],
+  [
+    1765,
+    "Stamp Act Congress",
+    "Colonial protest against taxation",
+    "Stamp Act Congress",
+    "us",
+    5,
+    "印花税法大会",
+    "印花税法大会的背景与影响",
+    "u3"
+  ],
+  [
+    1765,
+    "Sons of Liberty organize",
+    "Popular resistance to British policy",
+    "Sons of Liberty",
+    "us",
+    3,
+    "自由之子组织起来",
+    "自由之子组织起来的背景与影响",
+    "u3"
+  ],
+  [
+    1766,
+    "Declaratory Act",
+    "Parliament asserts authority over the colonies",
+    "Declaratory Act",
+    "us",
+    5,
+    "宣示法",
+    "宣示法的背景与影响",
+    "u3"
+  ],
+  [
+    1767,
+    "Townshend Acts",
+    "New taxes intensify colonial resistance",
+    "Townshend Acts",
+    "us",
+    5,
+    "汤森法案",
+    "汤森法案的背景与影响",
+    "u3"
+  ],
+  [
+    1768,
+    "Townshend nonimportation movement begins",
+    "Economic protest against Britain",
+    "Boston Non-importation agreement",
+    "us",
+    3,
+    "针对汤森税的非进口抵制开始",
+    "针对汤森税的非进口抵制开始的背景与影响",
+    "u3"
+  ],
+  [
+    1770,
+    "Boston Massacre",
+    "Violence turns public opinion against Britain",
+    "Boston Massacre",
+    "us",
+    5,
+    "波士顿惨案",
+    "波士顿惨案的背景与影响",
+    "u3"
+  ],
+  [
+    1773,
+    "Tea Act",
+    "Imperial crisis over tea taxation",
+    "Tea Act",
+    "us",
+    5,
+    "茶法",
+    "茶法的背景与影响",
+    "u3"
+  ],
+  [
+    1773,
+    "Boston Tea Party",
+    "Direct action against British authority",
+    "Boston Tea Party",
+    "us",
+    3,
+    "波士顿倾茶事件",
+    "波士顿倾茶事件的背景与影响",
+    "u3"
+  ],
+  [
+    1774,
+    "Intolerable Acts",
+    "Britain punishes Massachusetts",
+    "Intolerable Acts",
+    "us",
+    5,
+    "不可容忍法案",
+    "不可容忍法案的背景与影响",
+    "u3"
+  ],
+  [
+    1772,
+    "Boston Committee of Correspondence established",
+    "Intercolonial networks spread dissent",
+    "Committees of correspondence",
+    "us",
+    3,
+    "波士顿通讯委员会成立",
+    "波士顿通讯委员会成立的背景与影响",
+    "u3"
+  ],
+  [
+    1774,
+    "First Continental Congress",
+    "Intercolonial coordination against Britain",
+    "First Continental Congress",
+    "us",
+    3,
+    "第一届大陆会议",
+    "第一届大陆会议的背景与影响",
+    "u3"
+  ],
+  [
+    1775,
+    "Lexington and Concord",
+    "Revolutionary war begins",
+    "Battles of Lexington and Concord",
+    "us",
+    3,
+    "列克星敦和康科德战役",
+    "列克星敦和康科德战役的背景与影响",
+    "u3"
+  ],
+  [
+    1775,
+    "Militia mobilization",
+    "Local armed resistance grows",
+    "Militia (United States)",
+    "us",
+    3,
+    "民兵动员",
+    "民兵动员的背景与影响",
+    "u3"
+  ],
+  [
+    1775,
+    "Second Continental Congress",
+    "Revolutionary government takes shape",
+    "Second Continental Congress",
+    "us",
+    3,
+    "第二届大陆会议",
+    "第二届大陆会议的背景与影响",
+    "u3"
+  ],
+  [
+    1776,
+    "Declaration of Independence",
+    "Colonial break with Britain",
+    "United States Declaration of Independence",
+    "us",
+    5,
+    "独立宣言",
+    "独立宣言的背景与影响",
+    "u3"
+  ],
+  [
+    1776,
+    "Common Sense",
+    "Paine makes independence compelling",
+    "Common Sense",
+    "us",
+    3,
+    "《常识》",
+    "《常识》的背景与影响",
+    "u3"
+  ],
+  [
+    1777,
+    "Articles of Confederation adopted",
+    "First national framework",
+    "Articles of Confederation",
+    "us",
+    3,
+    "《邦联条例》通过",
+    "《邦联条例》通过的背景与影响",
+    "u3"
+  ],
+  [
+    1778,
+    "Franco-American Alliance concluded",
+    "Diplomacy helps the revolution survive",
+    "Franco-American alliance",
+    "us",
+    3,
+    "法美同盟缔结",
+    "法美同盟缔结的背景与影响",
+    "u3"
+  ],
+  [
+    1777,
+    "Saratoga victory",
+    "Turning point of the Revolutionary War",
+    "Battles of Saratoga",
+    "us",
+    3,
+    "萨拉托加胜利",
+    "萨拉托加胜利的背景与影响",
+    "u3"
+  ],
+  [
+    1781,
+    "Articles of Confederation ratified",
+    "Weak national government comes into force",
+    "Articles of Confederation",
+    "us",
+    3,
+    "《邦联条例》批准",
+    "《邦联条例》批准的背景与影响",
+    "u3"
+  ],
+  [
+    1781,
+    "Yorktown surrender",
+    "British defeat effectively ends the war",
+    "Siege of Yorktown",
+    "us",
+    3,
+    "约克镇投降",
+    "约克镇投降的背景与影响",
+    "u3"
+  ],
+  [
+    1783,
+    "Treaty of Paris ends the Revolution",
+    "U.S. independence recognized",
+    "Treaty of Paris (1783)",
+    "us",
+    5,
+    "巴黎条约结束独立战争",
+    "巴黎条约结束独立战争的背景与影响",
+    "u3"
+  ],
+  [
+    1786,
+    "Shays' Rebellion begins",
+    "Economic unrest exposes Confederation weakness",
+    "Shays' Rebellion",
+    "us",
+    5,
+    "谢司叛乱开始",
+    "谢司叛乱开始的背景与影响",
+    "u3"
+  ],
+  [
+    1787,
+    "Constitutional Convention",
+    "Founders design a stronger federal system",
+    "Constitutional Convention (United States)",
+    "us",
+    5,
+    "制宪会议",
+    "制宪会议的背景与影响",
+    "u3"
+  ],
+  [
+    1787,
+    "Great Compromise",
+    "Bicameral legislature resolves conflict",
+    "Connecticut Compromise",
+    "us",
+    5,
+    "大妥协",
+    "大妥协的背景与影响",
+    "u3"
+  ],
+  [
+    1787,
+    "Three-Fifths Compromise",
+    "Slavery shapes representation",
+    "Three-fifths Compromise",
+    "us",
+    5,
+    "五分之三妥协",
+    "五分之三妥协的背景与影响",
+    "u3"
+  ],
+  [
+    1787,
+    "Northwest Ordinance",
+    "Orderly expansion and anti-slavery precedent",
+    "Northwest Ordinance",
+    "us",
+    3,
+    "西北条例",
+    "西北条例的背景与影响",
+    "u3"
+  ],
+  [
+    1787,
+    "Federalist Papers begin publication",
+    "Arguments for ratification",
+    "The Federalist Papers",
+    "us",
+    3,
+    "《联邦党人文集》开始发表",
+    "《联邦党人文集》开始发表的背景与影响",
+    "u3"
+  ],
+  [
+    1787,
+    "Constitutional ratification debate begins",
+    "Federalists and Anti-Federalists debate the Constitution",
+    "Ratification of the United States Constitution",
+    "us",
+    3,
+    "宪法批准辩论开始",
+    "宪法批准辩论开始的背景与影响",
+    "u3"
+  ],
+  [
+    1789,
+    "Judiciary Act",
+    "Creates the federal court system",
+    "Judiciary Act of 1789",
+    "us",
+    5,
+    "司法法",
+    "司法法的背景与影响",
+    "u3"
+  ],
+  [
+    1789,
+    "Washington inaugurated",
+    "New federal government begins",
+    "First inauguration of George Washington",
+    "us",
+    4,
+    "华盛顿就任总统",
+    "华盛顿就任总统的背景与影响",
+    "u3"
+  ],
+  [
+    1790,
+    "Hamilton's financial program begins",
+    "Credit, debt, and national banking",
+    "Hamiltonian economic program",
+    "us",
+    3,
+    "汉密尔顿财政计划开始",
+    "汉密尔顿财政计划开始的背景与影响",
+    "u3"
+  ],
+  [
+    1791,
+    "Bill of Rights ratified",
+    "Protects civil liberties",
+    "United States Bill of Rights",
+    "us",
+    5,
+    "《权利法案》批准",
+    "《权利法案》批准的背景与影响",
+    "u3"
+  ],
+  [
+    1791,
+    "Whiskey Rebellion begins",
+    "Federal authority tested in the West",
+    "Whiskey Rebellion",
+    "us",
+    5,
+    "威士忌叛乱开始",
+    "威士忌叛乱开始的背景与影响",
+    "u3"
+  ],
+  [
+    1794,
+    "Jay's Treaty",
+    "Reduces conflict with Britain",
+    "Jay Treaty",
+    "us",
+    5,
+    "杰伊条约",
+    "杰伊条约的背景与影响",
+    "u3"
+  ],
+  [
+    1795,
+    "Pinckney's Treaty",
+    "Secures navigation rights on the Mississippi",
+    "Pinckney's Treaty",
+    "us",
+    5,
+    "平克尼条约",
+    "平克尼条约的背景与影响",
+    "u3"
+  ],
+  [
+    1796,
+    "Washington Farewell Address",
+    "Warnings against parties and permanent alliances",
+    "George Washington's Farewell Address",
+    "us",
+    3,
+    "华盛顿告别演说",
+    "华盛顿告别演说的背景与影响",
+    "u3"
+  ],
+  [
+    1798,
+    "Alien and Sedition Acts",
+    "Civil liberties under pressure",
+    "Alien and Sedition Acts",
+    "us",
+    5,
+    "《客籍法》和《惩治叛乱法》",
+    "《客籍法》和《惩治叛乱法》的背景与影响",
+    "u3"
+  ],
+  [
+    1798,
+    "Virginia and Kentucky Resolutions",
+    "States challenge federal power",
+    "Kentucky and Virginia Resolutions",
+    "us",
+    3,
+    "弗吉尼亚与肯塔基决议",
+    "弗吉尼亚与肯塔基决议的背景与影响",
+    "u3"
+  ],
+  [
+    1797,
+    "XYZ Affair begins",
+    "Tensions with France escalate",
+    "XYZ Affair",
+    "us",
+    3,
+    "XYZ事件开始",
+    "XYZ事件开始的背景与影响",
+    "u3"
+  ],
+  [
+    1800,
+    "Election of 1800",
+    "Peaceful transfer of power between parties",
+    "1800 United States presidential election",
+    "us",
+    5,
+    "1800年总统选举",
+    "1800年总统选举的背景与影响",
+    "u3"
+  ],
+  [
+    1801,
+    "Jefferson takes office",
+    "Republican ascendancy begins",
+    "First inauguration of Thomas Jefferson",
+    "us",
+    3,
+    "杰斐逊就任总统",
+    "杰斐逊就任总统的背景与影响",
+    "u4"
+  ],
+  [
+    1803,
+    "Louisiana Purchase",
+    "Massive territorial expansion",
+    "Louisiana Purchase",
+    "us",
+    5,
+    "路易斯安那购地",
+    "路易斯安那购地的背景与影响",
+    "u4"
+  ],
+  [
+    1803,
+    "Marbury v. Madison",
+    "Judicial review established",
+    "Marbury v. Madison",
+    "us",
+    5,
+    "马伯里诉麦迪逊案",
+    "马伯里诉麦迪逊案的背景与影响",
+    "u4"
+  ],
+  [
+    1804,
+    "Lewis and Clark expedition begins",
+    "Exploration of the trans-Mississippi West",
+    "Lewis and Clark Expedition",
+    "us",
+    3,
+    "刘易斯与克拉克远征开始",
+    "刘易斯与克拉克远征开始的背景与影响",
+    "u4"
+  ],
+  [
+    1807,
+    "Embargo Act",
+    "Jeffersonian trade restrictions backfire",
+    "Embargo Act of 1807",
+    "us",
+    5,
+    "禁运法",
+    "禁运法的背景与影响",
+    "u4"
+  ],
+  [
+    1807,
+    "Fulton steamboat demonstration",
+    "Transportation revolution accelerates",
+    "North River Steamboat",
+    "us",
+    3,
+    "富尔顿汽船示范",
+    "富尔顿汽船示范的背景与影响",
+    "u4"
+  ],
+  [
+    1812,
+    "War of 1812 begins",
+    "Second war with Britain",
+    "War of 1812",
+    "us",
+    5,
+    "1812年战争开始",
+    "1812年战争开始的背景与影响",
+    "u4"
+  ],
+  [
+    1814,
+    "Treaty of Ghent",
+    "War of 1812 ends",
+    "Treaty of Ghent",
+    "us",
+    5,
+    "根特条约",
+    "根特条约的背景与影响",
+    "u4"
+  ],
+  [
+    1814,
+    "Hartford Convention convenes",
+    "Federalist opposition to the war",
+    "Hartford Convention",
+    "us",
+    3,
+    "哈特福德会议召开",
+    "哈特福德会议召开的背景与影响",
+    "u4"
+  ],
+  [
+    1815,
+    "Battle of New Orleans",
+    "Jackson becomes a national hero",
+    "Battle of New Orleans",
+    "us",
+    3,
+    "新奥尔良战役",
+    "新奥尔良战役的背景与影响",
+    "u4"
+  ],
+  [
+    1817,
+    "Era of Good Feelings begins",
+    "One-party politics and nationalism",
+    "Era of Good Feelings",
+    "us",
+    3,
+    "“和睦时期”开始",
+    "“和睦时期”开始的背景与影响",
+    "u4"
+  ],
+  [
+    1816,
+    "Second Bank of the United States chartered",
+    "Federal financial system expands",
+    "Second Bank of the United States",
+    "us",
+    3,
+    "美国第二银行获特许成立",
+    "美国第二银行获特许成立的背景与影响",
+    "u4"
+  ],
+  [
+    1819,
+    "McCulloch v. Maryland",
+    "Federal power upheld",
+    "McCulloch v. Maryland",
+    "us",
+    5,
+    "麦卡洛克诉马里兰案",
+    "麦卡洛克诉马里兰案的背景与影响",
+    "u4"
+  ],
+  [
+    1819,
+    "Panic of 1819",
+    "First major national economic depression",
+    "Panic of 1819",
+    "us",
+    3,
+    "1819年恐慌",
+    "1819年恐慌的背景与影响",
+    "u4"
+  ],
+  [
+    1820,
+    "Missouri Compromise",
+    "Slavery expansion becomes sectional issue",
+    "Missouri Compromise",
+    "us",
+    5,
+    "密苏里妥协",
+    "密苏里妥协的背景与影响",
+    "u4"
+  ],
+  [
+    1819,
+    "Missouri Crisis begins",
+    "Slavery is linked to the future of the Union",
+    "Missouri Compromise",
+    "us",
+    3,
+    "密苏里危机开始",
+    "密苏里危机开始的背景与影响",
+    "u4"
+  ],
+  [
+    1823,
+    "Monroe Doctrine",
+    "U.S. claims a role in the Western Hemisphere",
+    "Monroe Doctrine",
+    "us",
+    5,
+    "门罗主义",
+    "门罗主义的背景与影响",
+    "u4"
+  ],
+  [
+    1824,
+    "Election of 1824",
+    "Corrupt bargain helps shape party politics",
+    "1824 United States presidential election",
+    "us",
+    5,
+    "1824年总统选举",
+    "1824年总统选举的背景与影响",
+    "u4"
+  ],
+  [
+    1825,
+    "Erie Canal opens",
+    "Internal improvements link regions",
+    "Erie Canal",
+    "us",
+    4,
+    "伊利运河开通",
+    "伊利运河开通的背景与影响",
+    "u4"
+  ],
+  [
+    1828,
+    "Andrew Jackson elected president",
+    "Mass democracy expands",
+    "1828 United States presidential election",
+    "us",
+    3,
+    "安德鲁·杰克逊当选总统",
+    "安德鲁·杰克逊当选总统的背景与影响",
+    "u4"
+  ],
+  [
+    1828,
+    "Tariff of Abominations",
+    "Sectional anger over federal tariffs",
+    "Tariff of Abominations",
+    "us",
+    3,
+    "可憎关税",
+    "可憎关税的背景与影响",
+    "u4"
+  ],
+  [
+    1830,
+    "Indian Removal Act",
+    "Forced migration of Native peoples",
+    "Indian Removal Act",
+    "us",
+    5,
+    "印第安人迁移法",
+    "印第安人迁移法的背景与影响",
+    "u4"
+  ],
+  [
+    1831,
+    "Nat Turner rebellion",
+    "Slave resistance intensifies white fear",
+    "Nat Turner's slave rebellion",
+    "us",
+    5,
+    "纳特·特纳叛乱",
+    "纳特·特纳叛乱的背景与影响",
+    "u4"
+  ],
+  [
+    1832,
+    "Nullification Crisis begins",
+    "States' rights challenge federal authority",
+    "Nullification crisis",
+    "us",
+    5,
+    "废止危机开始",
+    "废止危机开始的背景与影响",
+    "u4"
+  ],
+  [
+    1832,
+    "Worcester v. Georgia",
+    "Supreme Court backs Native sovereignty",
+    "Worcester v. Georgia",
+    "us",
+    5,
+    "伍斯特诉佐治亚案",
+    "伍斯特诉佐治亚案的背景与影响",
+    "u4"
+  ],
+  [
+    1833,
+    "Pet bank system begins",
+    "Jackson continues the Bank War",
+    "Pet banks",
+    "us",
+    3,
+    "“宠物银行”体系开始",
+    "“宠物银行”体系开始的背景与影响",
+    "u4"
+  ],
+  [
+    1836,
+    "Texas declares independence",
+    "Republic of Texas emerges",
+    "Texas Declaration of Independence",
+    "us",
+    3,
+    "得克萨斯宣布独立",
+    "得克萨斯宣布独立的背景与影响",
+    "u4"
+  ],
+  [
+    1837,
+    "Panic of 1837",
+    "Economic crisis hits the Jacksonian era",
+    "Panic of 1837",
+    "us",
+    3,
+    "1837年恐慌",
+    "1837年恐慌的背景与影响",
+    "u4"
+  ],
+  [
+    1840,
+    "Log cabin campaign",
+    "Popular campaigning defines the Whigs",
+    "1840 United States presidential election",
+    "us",
+    3,
+    "木屋竞选",
+    "木屋竞选的背景与影响",
+    "u4"
+  ],
+  [
+    1844,
+    "Election of James K. Polk",
+    "Manifest Destiny gains a president",
+    "1844 United States presidential election",
+    "us",
+    5,
+    "詹姆斯·波尔克当选",
+    "詹姆斯·波尔克当选的背景与影响",
+    "u5"
+  ],
+  [
+    1844,
+    "Telegraph demonstrated",
+    "Communication revolution changes politics and business",
+    "Electrical telegraph",
+    "us",
+    3,
+    "电报示范成功",
+    "电报示范成功的背景与影响",
+    "u4"
+  ],
+  [
+    1845,
+    "Annexation of Texas",
+    "U.S. expansion intensifies sectional tension",
+    "Texas annexation",
+    "us",
+    3,
+    "吞并得克萨斯",
+    "吞并得克萨斯的背景与影响",
+    "u5"
+  ],
+  [
+    1846,
+    "Mexican-American War begins",
+    "Expansion and slavery collide",
+    "Mexican-American War",
+    "us",
+    5,
+    "美墨战争开始",
+    "美墨战争开始的背景与影响",
+    "u5"
+  ],
+  [
+    1846,
+    "Oregon Treaty",
+    "U.S.-British boundary fixed in the Pacific Northwest",
+    "Oregon Treaty",
+    "us",
+    5,
+    "俄勒冈条约",
+    "俄勒冈条约的背景与影响",
+    "u5"
+  ],
+  [
+    1846,
+    "Wilmot Proviso",
+    "Debate over slavery in new territories",
+    "Wilmot Proviso",
+    "us",
+    3,
+    "威尔莫特但书",
+    "威尔莫特但书的背景与影响",
+    "u5"
+  ],
+  [
+    1848,
+    "Treaty of Guadalupe Hidalgo",
+    "Huge territorial gains after war with Mexico",
+    "Treaty of Guadalupe Hidalgo",
+    "us",
+    5,
+    "瓜达卢佩-伊达尔戈条约",
+    "瓜达卢佩-伊达尔戈条约的背景与影响",
+    "u5"
+  ],
+  [
+    1848,
+    "Gold Rush begins",
+    "Migration and economic change in California",
+    "California Gold Rush",
+    "us",
+    4,
+    "淘金热开始",
+    "淘金热开始的背景与影响",
+    "u5"
+  ],
+  [
+    1848,
+    "Seneca Falls Convention",
+    "Women demand political rights",
+    "Seneca Falls Convention",
+    "us",
+    3,
+    "塞尼卡福尔斯会议",
+    "塞尼卡福尔斯会议的背景与影响",
+    "u4"
+  ],
+  [
+    1850,
+    "Compromise of 1850",
+    "Sectional conflict temporarily eased",
+    "Compromise of 1850",
+    "us",
+    5,
+    "1850年妥协",
+    "1850年妥协的背景与影响",
+    "u5"
+  ],
+  [
+    1850,
+    "Fugitive Slave Act",
+    "Enforcement crisis over slavery",
+    "Fugitive Slave Act of 1850",
+    "us",
+    5,
+    "逃奴法",
+    "逃奴法的背景与影响",
+    "u5"
+  ],
+  [
+    1852,
+    "Uncle Tom's Cabin",
+    "Abolitionist literature shapes opinion",
+    "Uncle Tom's Cabin",
+    "us",
+    3,
+    "《汤姆叔叔的小屋》",
+    "《汤姆叔叔的小屋》的背景与影响",
+    "u5"
+  ],
+  [
+    1854,
+    "Kansas-Nebraska Act",
+    "Popular sovereignty reignites sectional conflict",
+    "Kansas-Nebraska Act",
+    "us",
+    5,
+    "堪萨斯-内布拉斯加法案",
+    "堪萨斯-内布拉斯加法案的背景与影响",
+    "u5"
+  ],
+  [
+    1854,
+    "Republican Party founded",
+    "Anti-slavery coalition forms",
+    "Republican Party (United States)",
+    "us",
+    4,
+    "共和党成立",
+    "共和党成立的背景与影响",
+    "u5"
+  ],
+  [
+    1854,
+    "Bleeding Kansas begins",
+    "Violence over slavery in the territories",
+    "Bleeding Kansas",
+    "us",
+    3,
+    "“流血的堪萨斯”开始",
+    "“流血的堪萨斯”开始的背景与影响",
+    "u5"
+  ],
+  [
+    1857,
+    "Dred Scott v. Sandford",
+    "Supreme Court deepens sectional crisis",
+    "Dred Scott v. Sandford",
+    "us",
+    5,
+    "德雷德·斯科特诉桑福德案",
+    "德雷德·斯科特诉桑福德案的背景与影响",
+    "u5"
+  ],
+  [
+    1858,
+    "Lincoln-Douglas debates",
+    "Slavery and democracy in public debate",
+    "Lincoln-Douglas debates",
+    "us",
+    3,
+    "林肯-道格拉斯辩论",
+    "林肯-道格拉斯辩论的背景与影响",
+    "u5"
+  ],
+  [
+    1859,
+    "John Brown's raid on Harpers Ferry",
+    "Militant abolitionism shocks the South",
+    "John Brown's raid on Harpers Ferry",
+    "us",
+    5,
+    "约翰·布朗袭击哈珀斯费里",
+    "约翰·布朗袭击哈珀斯费里的背景与影响",
+    "u5"
+  ],
+  [
+    1860,
+    "Election of Lincoln",
+    "Secession crisis begins",
+    "1860 United States presidential election",
+    "us",
+    5,
+    "林肯当选",
+    "林肯当选的背景与影响",
+    "u5"
+  ],
+  [
+    1860,
+    "Secession crisis begins",
+    "The Union fractures",
+    "Secession in the United States",
+    "us",
+    5,
+    "脱离联邦危机开始",
+    "脱离联邦危机开始的背景与影响",
+    "u5"
+  ],
+  [
+    1861,
+    "First Battle of Bull Run",
+    "War becomes a long struggle",
+    "First Battle of Bull Run",
+    "us",
+    3,
+    "第一次布尔溪战役",
+    "第一次布尔溪战役的背景与影响",
+    "u5"
+  ],
+  [
+    1861,
+    "Fort Sumter",
+    "Civil War opens",
+    "Battle of Fort Sumter",
+    "us",
+    3,
+    "萨姆特堡",
+    "萨姆特堡的背景与影响",
+    "u5"
+  ],
+  [
+    1863,
+    "Emancipation Proclamation takes effect",
+    "War aims shift toward emancipation",
+    "Emancipation Proclamation",
+    "us",
+    5,
+    "《解放奴隶宣言》生效",
+    "《解放奴隶宣言》生效的背景与影响",
+    "u5"
+  ],
+  [
+    1862,
+    "Homestead Act",
+    "Federal land policy promotes settlement",
+    "Homestead Acts",
+    "us",
+    5,
+    "宅地法",
+    "宅地法的背景与影响",
+    "u5"
+  ],
+  [
+    1862,
+    "Morrill Land-Grant Act",
+    "Federal support for higher education",
+    "Morrill Land-Grant Acts",
+    "us",
+    5,
+    "莫里尔赠地学院法",
+    "莫里尔赠地学院法的背景与影响",
+    "u5"
+  ],
+  [
+    1862,
+    "Pacific Railway Act",
+    "Transcontinental railroad authorized",
+    "Pacific Railroad Acts",
+    "us",
+    5,
+    "太平洋铁路法",
+    "太平洋铁路法的背景与影响",
+    "u5"
+  ],
+  [
+    1861,
+    "Anaconda Plan proposed",
+    "Conquest, blockade, and emancipation",
+    "Anaconda Plan",
+    "us",
+    5,
+    "“蟒蛇计划”提出",
+    "“蟒蛇计划”提出的背景与影响",
+    "u5"
+  ],
+  [
+    1863,
+    "Battle of Gettysburg",
+    "Turning point in the Civil War",
+    "Battle of Gettysburg",
+    "us",
+    5,
+    "葛底斯堡战役",
+    "葛底斯堡战役的背景与影响",
+    "u5"
+  ],
+  [
+    1863,
+    "Black enlistment in Union forces begins to expand",
+    "The war becomes a fight for freedom",
+    "United States Colored Troops",
+    "us",
+    5,
+    "黑人加入联邦军开始扩大",
+    "黑人加入联邦军开始扩大的背景与影响",
+    "u5"
+  ],
+  [
+    1863,
+    "Gettysburg Address",
+    "Union war aims redefined",
+    "Gettysburg Address",
+    "us",
+    5,
+    "葛底斯堡演说",
+    "葛底斯堡演说的背景与影响",
+    "u5"
+  ],
+  [
+    1863,
+    "New York Draft Riots",
+    "Urban unrest reveals class and race tensions",
+    "New York City draft riots",
+    "us",
+    3,
+    "纽约征兵暴动",
+    "纽约征兵暴动的背景与影响",
+    "u5"
+  ],
+  [
+    1863,
+    "Vicksburg falls",
+    "Union controls the Mississippi River",
+    "Siege of Vicksburg",
+    "us",
+    3,
+    "维克斯堡陷落",
+    "维克斯堡陷落的背景与影响",
+    "u5"
+  ],
+  [
+    1864,
+    "Lincoln reelected",
+    "Union victory looks likely",
+    "1864 United States presidential election",
+    "us",
+    3,
+    "林肯连任",
+    "林肯连任的背景与影响",
+    "u5"
+  ],
+  [
+    1864,
+    "Sherman's March to the Sea begins",
+    "Total war devastates the South",
+    "Sherman's March to the Sea",
+    "us",
+    3,
+    "谢尔曼向海洋进军开始",
+    "谢尔曼向海洋进军开始的背景与影响",
+    "u5"
+  ],
+  [
+    1865,
+    "13th Amendment",
+    "Slavery abolished nationwide",
+    "Thirteenth Amendment to the United States Constitution",
+    "us",
+    5,
+    "第十三修正案",
+    "第十三修正案的背景与影响",
+    "u5"
+  ],
+  [
+    1865,
+    "Black Codes begin to be enacted",
+    "Southern states attempt to control freedpeople",
+    "Black Codes (United States)",
+    "us",
+    5,
+    "各州开始颁布“黑人法典”",
+    "各州开始颁布“黑人法典”的背景与影响",
+    "u5"
+  ],
+  [
+    1865,
+    "Appomattox surrender",
+    "Civil War ends",
+    "Battle of Appomattox Court House",
+    "us",
+    3,
+    "阿波马托克斯投降",
+    "阿波马托克斯投降的背景与影响",
+    "u5"
+  ],
+  [
+    1865,
+    "Freedmen's Bureau established",
+    "Federal aid for formerly enslaved people",
+    "Freedmen's Bureau",
+    "us",
+    3,
+    "自由民局成立",
+    "自由民局成立的背景与影响",
+    "u5"
+  ],
+  [
+    1865,
+    "Lincoln assassinated",
+    "Postwar politics enter a new phase",
+    "Assassination of Abraham Lincoln",
+    "us",
+    3,
+    "林肯遇刺",
+    "林肯遇刺的背景与影响",
+    "u5"
+  ],
+  [
+    1866,
+    "Civil Rights Act of 1866",
+    "Federal protection of citizenship rights",
+    "Civil Rights Act of 1866",
+    "us",
+    5,
+    "1866年民权法",
+    "1866年民权法的背景与影响",
+    "u5"
+  ],
+  [
+    1865,
+    "Ku Klux Klan founded",
+    "White supremacist terror grows",
+    "Ku Klux Klan",
+    "us",
+    4,
+    "三K党成立",
+    "三K党成立的背景与影响",
+    "u5"
+  ],
+  [
+    1867,
+    "First Reconstruction Act enacted",
+    "Military Reconstruction begins in the South",
+    "Reconstruction Acts",
+    "us",
+    5,
+    "第一部《重建法案》颁布",
+    "第一部《重建法案》颁布的背景与影响",
+    "u5"
+  ],
+  [
+    1868,
+    "14th Amendment",
+    "Birthright citizenship and equal protection",
+    "Fourteenth Amendment to the United States Constitution",
+    "us",
+    5,
+    "第十四修正案",
+    "第十四修正案的背景与影响",
+    "u5"
+  ],
+  [
+    1869,
+    "Transcontinental railroad completed",
+    "National market and western settlement accelerate",
+    "First transcontinental railroad",
+    "us",
+    3,
+    "横贯大陆铁路完工",
+    "横贯大陆铁路完工的背景与影响",
+    "u6"
+  ],
+  [
+    1870,
+    "15th Amendment",
+    "Voting rights for Black men",
+    "Fifteenth Amendment to the United States Constitution",
+    "us",
+    5,
+    "第十五修正案",
+    "第十五修正案的背景与影响",
+    "u5"
+  ],
+  [
+    1870,
+    "Standard Oil founded",
+    "Corporate consolidation begins",
+    "Standard Oil",
+    "us",
+    4,
+    "标准石油成立",
+    "标准石油成立的背景与影响",
+    "u6"
+  ],
+  [
+    1870,
+    "First Enforcement Act enacted",
+    "Federal response to paramilitary violence",
+    "Enforcement Acts",
+    "us",
+    5,
+    "第一部《执行法案》颁布",
+    "第一部《执行法案》颁布的背景与影响",
+    "u5"
+  ],
+  [
+    1873,
+    "Long Depression begins",
+    "Deflation and unemployment strike the nation",
+    "Long Depression",
+    "us",
+    3,
+    "长期萧条开始",
+    "长期萧条开始的背景与影响",
+    "u6"
+  ],
+  [
+    1873,
+    "Panic of 1873",
+    "Severe economic depression",
+    "Panic of 1873",
+    "us",
+    3,
+    "1873年恐慌",
+    "1873年恐慌的背景与影响",
+    "u6"
+  ],
+  [
+    1875,
+    "Civil Rights Act of 1875",
+    "Reconstruction-era civil rights law",
+    "Civil Rights Act of 1875",
+    "us",
+    5,
+    "1875年民权法",
+    "1875年民权法的背景与影响",
+    "u5"
+  ],
+  [
+    1877,
+    "Compromise of 1877",
+    "Reconstruction ends",
+    "Compromise of 1877",
+    "us",
+    5,
+    "1877年妥协",
+    "1877年妥协的背景与影响",
+    "u5"
+  ],
+  [
+    1877,
+    "Great Railroad Strike",
+    "Labor unrest spreads nationwide",
+    "Great Railroad Strike of 1877",
+    "us",
+    3,
+    "铁路大罢工",
+    "铁路大罢工的背景与影响",
+    "u6"
+  ],
+  [
+    1882,
+    "Chinese Exclusion Act",
+    "Federal restriction of immigration",
+    "Chinese Exclusion Act",
+    "us",
+    5,
+    "排华法案",
+    "排华法案的背景与影响",
+    "u6"
+  ],
+  [
+    1883,
+    "Pendleton Civil Service Act",
+    "Reform of patronage politics",
+    "Pendleton Civil Service Reform Act",
+    "us",
+    5,
+    "彭德尔顿文官法",
+    "彭德尔顿文官法的背景与影响",
+    "u6"
+  ],
+  [
+    1883,
+    "Brooklyn Bridge completed",
+    "Symbol of industrial modernity",
+    "Brooklyn Bridge",
+    "us",
+    3,
+    "布鲁克林大桥完工",
+    "布鲁克林大桥完工的背景与影响",
+    "u6"
+  ],
+  [
+    1877,
+    "Munn v. Illinois decided",
+    "Granger challenge to corporate power",
+    "Munn v. Illinois",
+    "us",
+    5,
+    "芒恩诉伊利诺伊州案判决",
+    "芒恩诉伊利诺伊州案判决的背景与影响",
+    "u6"
+  ],
+  [
+    1886,
+    "American Federation of Labor founded",
+    "Craft unionism grows",
+    "American Federation of Labor",
+    "us",
+    4,
+    "美国劳工联合会成立",
+    "美国劳工联合会成立的背景与影响",
+    "u6"
+  ],
+  [
+    1886,
+    "Haymarket Affair",
+    "Labor radicalism sparks backlash",
+    "Haymarket affair",
+    "us",
+    3,
+    "海市场事件",
+    "海市场事件的背景与影响",
+    "u6"
+  ],
+  [
+    1886,
+    "Statue of Liberty dedicated",
+    "Symbol of immigration and citizenship",
+    "Statue of Liberty",
+    "us",
+    3,
+    "自由女神像落成",
+    "自由女神像落成的背景与影响",
+    "u6"
+  ],
+  [
+    1887,
+    "Dawes Act",
+    "Assimilation policy on Native lands",
+    "Dawes Act",
+    "us",
+    5,
+    "道斯法案",
+    "道斯法案的背景与影响",
+    "u6"
+  ],
+  [
+    1887,
+    "Interstate Commerce Act",
+    "First federal railroad regulation",
+    "Interstate Commerce Act of 1887",
+    "us",
+    5,
+    "州际商务法",
+    "州际商务法的背景与影响",
+    "u6"
+  ],
+  [
+    1888,
+    "National Geographic Society founded",
+    "Scientific publishing and consumer culture expand",
+    "National Geographic Society",
+    "us",
+    3,
+    "国家地理学会成立",
+    "国家地理学会成立的背景与影响",
+    "u6"
+  ],
+  [
+    1889,
+    "Hull House founded",
+    "Settlement house reform begins",
+    "Hull House",
+    "us",
+    3,
+    "赫尔之家成立",
+    "赫尔之家成立的背景与影响",
+    "u6"
+  ],
+  [
+    1890,
+    "Sherman Antitrust Act",
+    "Federal attempt to restrain monopolies",
+    "Sherman Antitrust Act",
+    "us",
+    5,
+    "谢尔曼反托拉斯法",
+    "谢尔曼反托拉斯法的背景与影响",
+    "u6"
+  ],
+  [
+    1890,
+    "Wounded Knee Massacre",
+    "End of armed Native resistance on the Plains",
+    "Wounded Knee Massacre",
+    "us",
+    5,
+    "伤膝河大屠杀",
+    "伤膝河大屠杀的背景与影响",
+    "u6"
+  ],
+  [
+    1890,
+    "McKinley Tariff",
+    "Protectionism and high tariffs",
+    "McKinley Tariff",
+    "us",
+    3,
+    "麦金莱关税",
+    "麦金莱关税的背景与影响",
+    "u6"
+  ],
+  [
+    1892,
+    "Omaha Platform adopted",
+    "Populist reform program",
+    "Omaha Platform",
+    "us",
+    3,
+    "《奥马哈纲领》通过",
+    "《奥马哈纲领》通过的背景与影响",
+    "u6"
+  ],
+  [
+    1892,
+    "Ellis Island opens",
+    "Immigration station in New York Harbor",
+    "Ellis Island",
+    "us",
+    4,
+    "埃利斯岛开放",
+    "埃利斯岛开放的背景与影响",
+    "u6"
+  ],
+  [
+    1892,
+    "Homestead Strike",
+    "Industrial conflict at Carnegie Steel",
+    "Homestead strike",
+    "us",
+    3,
+    "霍姆斯特德罢工",
+    "霍姆斯特德罢工的背景与影响",
+    "u6"
+  ],
+  [
+    1893,
+    "Panic of 1893",
+    "Economic crisis fuels reform and populism",
+    "Panic of 1893",
+    "us",
+    3,
+    "1893年恐慌",
+    "1893年恐慌的背景与影响",
+    "u6"
+  ],
+  [
+    1894,
+    "Coxey's Army",
+    "Unemployed workers march on Washington",
+    "Coxey's Army",
+    "us",
+    3,
+    "考克西大军",
+    "考克西大军的背景与影响",
+    "u6"
+  ],
+  [
+    1894,
+    "Pullman Strike",
+    "Federal intervention in labor unrest",
+    "Pullman Strike",
+    "us",
+    3,
+    "普尔曼罢工",
+    "普尔曼罢工的背景与影响",
+    "u6"
+  ],
+  [
+    1896,
+    "Election of McKinley",
+    "New alignment of politics and business",
+    "1896 United States presidential election",
+    "us",
+    5,
+    "麦金莱当选",
+    "麦金莱当选的背景与影响",
+    "u6"
+  ],
+  [
+    1896,
+    "Plessy v. Ferguson",
+    "Legal segregation upheld",
+    "Plessy v. Ferguson",
+    "us",
+    5,
+    "普莱西诉弗格森案",
+    "普莱西诉弗格森案的背景与影响",
+    "u6"
+  ],
+  [
+    1896,
+    "Cross of Gold speech",
+    "Populist attack on the gold standard",
+    "Cross of Gold speech",
+    "us",
+    3,
+    "黄金十字演说",
+    "黄金十字演说的背景与影响",
+    "u6"
+  ],
+  [
+    1896,
+    "Klondike Gold Rush begins",
+    "Western migration and capital flows",
+    "Klondike Gold Rush",
+    "us",
+    3,
+    "克朗代克淘金热开始",
+    "克朗代克淘金热开始的背景与影响",
+    "u6"
+  ],
+  [
+    1898,
+    "Spanish-American War",
+    "U.S. becomes a global power",
+    "Spanish-American War",
+    "us",
+    5,
+    "美西战争",
+    "美西战争的背景与影响",
+    "u7"
+  ],
+  [
+    1898,
+    "Treaty of Paris",
+    "U.S. acquires overseas possessions",
+    "Treaty of Paris (1898)",
+    "us",
+    5,
+    "巴黎条约",
+    "巴黎条约的背景与影响",
+    "u7"
+  ],
+  [
+    1898,
+    "Annexation of Hawaii",
+    "Strategic expansion in the Pacific",
+    "Newlands Resolution",
+    "us",
+    3,
+    "吞并夏威夷",
+    "吞并夏威夷的背景与影响",
+    "u7"
+  ],
+  [
+    1898,
+    "De Lôme Letter published",
+    "Media helps drive war fever",
+    "De Lôme Letter",
+    "us",
+    3,
+    "德洛姆信公开发表",
+    "德洛姆信公开发表的背景与影响",
+    "u7"
+  ],
+  [
+    1899,
+    "Philippine-American War begins",
+    "Conflict over empire in the Pacific",
+    "Philippine–American War",
+    "us",
+    5,
+    "美菲战争开始",
+    "美菲战争开始的背景与影响",
+    "u7"
+  ],
+  [
+    1899,
+    "Open Door Notes",
+    "U.S. seeks access to China",
+    "Open Door Policy",
+    "us",
+    3,
+    "门户开放照会",
+    "门户开放照会的背景与影响",
+    "u7"
+  ],
+  [
+    1901,
+    "Platt Amendment",
+    "U.S. influence in Cuba",
+    "Platt Amendment",
+    "us",
+    5,
+    "普拉特修正案",
+    "普拉特修正案的背景与影响",
+    "u7"
+  ],
+  [
+    1901,
+    "Theodore Roosevelt becomes president",
+    "Progressive activism begins at the top",
+    "Presidency of Theodore Roosevelt",
+    "us",
+    3,
+    "西奥多·罗斯福成为总统",
+    "西奥多·罗斯福成为总统的背景与影响",
+    "u7"
+  ],
+  [
+    1903,
+    "Wright brothers fly",
+    "Aviation age begins",
+    "Wright Flyer",
+    "us",
+    3,
+    "莱特兄弟试飞",
+    "莱特兄弟试飞的背景与影响",
+    "u7"
+  ],
+  [
+    1904,
+    "Roosevelt Corollary",
+    "U.S. asserts intervention in Latin America",
+    "Roosevelt Corollary",
+    "us",
+    4,
+    "罗斯福推论",
+    "罗斯福推论的背景与影响",
+    "u7"
+  ],
+  [
+    1906,
+    "Meat Inspection Act",
+    "Progressive regulation of industry",
+    "Federal Meat Inspection Act",
+    "us",
+    5,
+    "肉类检验法",
+    "肉类检验法的背景与影响",
+    "u7"
+  ],
+  [
+    1906,
+    "Pure Food and Drug Act",
+    "Consumer protection gains federal support",
+    "Pure Food and Drug Act",
+    "us",
+    5,
+    "纯净食品与药品法",
+    "纯净食品与药品法的背景与影响",
+    "u7"
+  ],
+  [
+    1909,
+    "NAACP founded",
+    "Civil rights organization grows",
+    "NAACP",
+    "us",
+    4,
+    "全国有色人种协进会成立",
+    "全国有色人种协进会成立的背景与影响",
+    "u7"
+  ],
+  [
+    1906,
+    "Upton Sinclair's The Jungle published",
+    "Muckraking and reform",
+    "The Jungle",
+    "us",
+    3,
+    "厄普顿·辛克莱《屠场》出版",
+    "厄普顿·辛克莱《屠场》出版的背景与影响",
+    "u7"
+  ],
+  [
+    1912,
+    "Bull Moose campaign",
+    "Progressive politics reaches a high point",
+    "Progressive Party (United States, 1912)",
+    "us",
+    3,
+    "公麋党竞选",
+    "公麋党竞选的背景与影响",
+    "u7"
+  ],
+  [
+    1913,
+    "Federal Reserve Act",
+    "National banking reform",
+    "Federal Reserve Act",
+    "us",
+    5,
+    "联邦储备法",
+    "联邦储备法的背景与影响",
+    "u7"
+  ],
+  [
+    1914,
+    "World War I begins",
+    "The U.S. is pulled toward global conflict",
+    "World War I",
+    "us",
+    5,
+    "第一次世界大战开始",
+    "第一次世界大战开始的背景与影响",
+    "u7"
+  ],
+  [
+    1914,
+    "Panama Canal opens",
+    "Strategic and commercial power expands",
+    "Panama Canal",
+    "us",
+    4,
+    "巴拿马运河开通",
+    "巴拿马运河开通的背景与影响",
+    "u7"
+  ],
+  [
+    1914,
+    "U.S. neutrality in World War I begins",
+    "Americans debate intervention",
+    "United States in World War I",
+    "us",
+    3,
+    "美国在第一次世界大战中开始保持中立",
+    "美国在第一次世界大战中开始保持中立的背景与影响",
+    "u7"
+  ],
+  [
+    1917,
+    "Espionage Act",
+    "Limits dissent during wartime",
+    "Espionage Act of 1917",
+    "us",
+    5,
+    "间谍法",
+    "间谍法的背景与影响",
+    "u7"
+  ],
+  [
+    1917,
+    "U.S. enters World War I",
+    "Mobilization for total war",
+    "American entry into World War I",
+    "us",
+    5,
+    "美国参加第一次世界大战",
+    "美国参加第一次世界大战的背景与影响",
+    "u7"
+  ],
+  [
+    1917,
+    "U.S. World War I home-front mobilization begins",
+    "State power expands during war",
+    "United States home front during World War I",
+    "us",
+    3,
+    "美国一战国内动员开始",
+    "美国一战国内动员开始的背景与影响",
+    "u7"
+  ],
+  [
+    1918,
+    "Armistice ends World War I",
+    "War in Europe concludes",
+    "Armistice of 11 November 1918",
+    "us",
+    5,
+    "停战协定结束一战",
+    "停战协定结束一战的背景与影响",
+    "u7"
+  ],
+  [
+    1918,
+    "Sedition Act",
+    "Free speech under pressure",
+    "Sedition Act of 1918",
+    "us",
+    5,
+    "煽动叛乱法",
+    "煽动叛乱法的背景与影响",
+    "u7"
+  ],
+  [
+    1919,
+    "Versailles Treaty rejected",
+    "Senate rejects the League of Nations",
+    "Treaty of Versailles",
+    "us",
+    5,
+    "凡尔赛条约遭否决",
+    "凡尔赛条约遭否决的背景与影响",
+    "u7"
+  ],
+  [
+    1919,
+    "First Red Scare begins",
+    "Fear of radicalism intensifies",
+    "First Red Scare",
+    "us",
+    3,
+    "第一次红色恐慌开始",
+    "第一次红色恐慌开始的背景与影响",
+    "u7"
+  ],
+  [
+    1919,
+    "Red Summer",
+    "Racial violence after the war",
+    "Red Summer",
+    "us",
+    3,
+    "红色夏季",
+    "红色夏季的背景与影响",
+    "u7"
+  ],
+  [
+    1920,
+    "19th Amendment",
+    "Women win the vote",
+    "Nineteenth Amendment to the United States Constitution",
+    "us",
+    5,
+    "第十九修正案",
+    "第十九修正案的背景与影响",
+    "u7"
+  ],
+  [
+    1919,
+    "Palmer Raids begin",
+    "First Red Scare intensifies",
+    "Palmer Raids",
+    "us",
+    3,
+    "帕尔默突袭开始",
+    "帕尔默突袭开始的背景与影响",
+    "u7"
+  ],
+  [
+    1924,
+    "Immigration Act of 1924",
+    "Quota system restricts immigration",
+    "Immigration Act of 1924",
+    "us",
+    5,
+    "1924年移民法",
+    "1924年移民法的背景与影响",
+    "u7"
+  ],
+  [
+    1925,
+    "Scopes Trial",
+    "Culture conflict over science and religion",
+    "Scopes trial",
+    "us",
+    3,
+    "斯科普斯审判",
+    "斯科普斯审判的背景与影响",
+    "u7"
+  ],
+  [
+    1927,
+    "Lindbergh transatlantic flight",
+    "Mass media and modern celebrity",
+    "Spirit of St. Louis",
+    "us",
+    3,
+    "林德伯格飞越大西洋",
+    "林德伯格飞越大西洋的背景与影响",
+    "u7"
+  ],
+  [
+    1929,
+    "Stock Market Crash",
+    "Great Depression begins",
+    "Wall Street Crash of 1929",
+    "us",
+    5,
+    "股市崩盘",
+    "股市崩盘的背景与影响",
+    "u7"
+  ],
+  [
+    1932,
+    "Bonus Army marches",
+    "Veterans protest during the Depression",
+    "Bonus Army",
+    "us",
+    3,
+    "退伍军人奖金大军进军",
+    "退伍军人奖金大军进军的背景与影响",
+    "u7"
+  ],
+  [
+    1933,
+    "First New Deal begins",
+    "Federal action to stabilize the economy",
+    "New Deal",
+    "us",
+    5,
+    "第一次新政开始",
+    "第一次新政开始的背景与影响",
+    "u7"
+  ],
+  [
+    1933,
+    "Franklin Roosevelt inaugurated",
+    "New Deal era begins",
+    "First inauguration of Franklin D. Roosevelt",
+    "us",
+    4,
+    "富兰克林·罗斯福就任总统",
+    "富兰克林·罗斯福就任总统的背景与影响",
+    "u7"
+  ],
+  [
+    1935,
+    "Social Security Act",
+    "Federal welfare state expands",
+    "Social Security Act",
+    "us",
+    5,
+    "社会保障法",
+    "社会保障法的背景与影响",
+    "u7"
+  ],
+  [
+    1935,
+    "Wagner Act",
+    "Workers gain collective bargaining rights",
+    "National Labor Relations Act of 1935",
+    "us",
+    5,
+    "瓦格纳法",
+    "瓦格纳法的背景与影响",
+    "u7"
+  ],
+  [
+    1935,
+    "WPA created",
+    "Public works and employment programs",
+    "Works Progress Administration",
+    "us",
+    3,
+    "工程振兴署成立",
+    "工程振兴署成立的背景与影响",
+    "u7"
+  ],
+  [
+    1930,
+    "Dust Bowl begins",
+    "Environmental disaster and migration",
+    "Dust Bowl",
+    "us",
+    5,
+    "尘暴区灾难开始",
+    "尘暴区灾难开始的背景与影响",
+    "u7"
+  ],
+  [
+    1937,
+    "Court-packing plan",
+    "Conflict over New Deal limits",
+    "Judicial Procedures Reform Bill of 1937",
+    "us",
+    5,
+    "填塞法院计划",
+    "填塞法院计划的背景与影响",
+    "u7"
+  ],
+  [
+    1939,
+    "World War II begins in Europe",
+    "Another global war starts",
+    "World War II",
+    "us",
+    5,
+    "第二次世界大战在欧洲爆发",
+    "第二次世界大战在欧洲爆发的背景与影响",
+    "u7"
+  ],
+  [
+    1940,
+    "FDR delivers the “Arsenal of Democracy” address",
+    "Industrial power supports Allies",
+    "Arsenal of Democracy",
+    "us",
+    3,
+    "罗斯福发表“民主兵工厂”演说",
+    "罗斯福发表“民主兵工厂”演说的背景与影响",
+    "u7"
+  ],
+  [
+    1941,
+    "Attack on Pearl Harbor",
+    "U.S. enters World War II",
+    "Attack on Pearl Harbor",
+    "us",
+    5,
+    "珍珠港袭击",
+    "珍珠港袭击的背景与影响",
+    "u7"
+  ],
+  [
+    1941,
+    "Lend-Lease Act",
+    "U.S. supports Allied powers",
+    "Lend-Lease",
+    "us",
+    5,
+    "租借法案",
+    "租借法案的背景与影响",
+    "u7"
+  ],
+  [
+    1942,
+    "Japanese American internment begins",
+    "Civil liberties restricted during war",
+    "Internment of Japanese Americans",
+    "us",
+    3,
+    "日裔美国人拘禁开始",
+    "日裔美国人拘禁开始的背景与影响",
+    "u7"
+  ],
+  [
+    1944,
+    "GI Bill",
+    "Veterans reshape postwar America",
+    "G.I. Bill",
+    "us",
+    5,
+    "退伍军人权利法案",
+    "退伍军人权利法案的背景与影响",
+    "u7"
+  ],
+  [
+    1944,
+    "D-Day",
+    "Allied invasion of Nazi-occupied Europe",
+    "Normandy landings",
+    "us",
+    3,
+    "诺曼底登陆日",
+    "诺曼底登陆日的背景与影响",
+    "u7"
+  ],
+  [
+    1945,
+    "United Nations founded",
+    "Postwar international order takes shape",
+    "United Nations",
+    "us",
+    4,
+    "联合国成立",
+    "联合国成立的背景与影响",
+    "u7"
+  ],
+  [
+    1945,
+    "Atomic bombings of Hiroshima and Nagasaki",
+    "World War II ends in the Pacific",
+    "Atomic bombings of Hiroshima and Nagasaki",
+    "us",
+    3,
+    "广岛与长崎原子弹爆炸",
+    "广岛与长崎原子弹爆炸的背景与影响",
+    "u7"
+  ],
+  [
+    1947,
+    "Truman Doctrine",
+    "Containment becomes a guiding principle",
+    "Truman Doctrine",
+    "us",
+    4,
+    "杜鲁门主义",
+    "杜鲁门主义的背景与影响",
+    "u8"
+  ],
+  [
+    1948,
+    "Berlin Airlift begins",
+    "Cold War crisis in Germany",
+    "Berlin Blockade",
+    "us",
+    3,
+    "柏林空运开始",
+    "柏林空运开始的背景与影响",
+    "u8"
+  ],
+  [
+    1948,
+    "Marshall Plan",
+    "Economic aid to rebuild Europe",
+    "Marshall Plan",
+    "us",
+    3,
+    "马歇尔计划",
+    "马歇尔计划的背景与影响",
+    "u8"
+  ],
+  [
+    1948,
+    "Truman desegregates the armed forces",
+    "Early civil rights step by the federal government",
+    "Executive Order 9981",
+    "us",
+    3,
+    "杜鲁门废除军队种族隔离",
+    "杜鲁门废除军队种族隔离的背景与影响",
+    "u8"
+  ],
+  [
+    1950,
+    "Korean War begins",
+    "Containment turns hot in Asia",
+    "Korean War",
+    "us",
+    5,
+    "朝鲜战争开始",
+    "朝鲜战争开始的背景与影响",
+    "u8"
+  ],
+  [
+    1950,
+    "McCarthyism begins",
+    "Fear of communism dominates politics",
+    "McCarthyism",
+    "us",
+    4,
+    "麦卡锡主义开始兴起",
+    "麦卡锡主义开始兴起的背景与影响",
+    "u8"
+  ],
+  [
+    1950,
+    "NSC-68",
+    "Military buildup for the Cold War",
+    "NSC 68",
+    "us",
+    3,
+    "NSC-68号文件",
+    "NSC-68号文件的背景与影响",
+    "u8"
+  ],
+  [
+    1954,
+    "Brown v. Board of Education",
+    "School segregation is ruled unconstitutional",
+    "Brown v. Board of Education",
+    "us",
+    5,
+    "布朗诉教育委员会案",
+    "布朗诉教育委员会案的背景与影响",
+    "u8"
+  ],
+  [
+    1955,
+    "Montgomery Bus Boycott begins",
+    "Mass civil rights protest begins",
+    "Montgomery bus boycott",
+    "us",
+    3,
+    "蒙哥马利公交车抵制运动开始",
+    "蒙哥马利公交车抵制运动开始的背景与影响",
+    "u8"
+  ],
+  [
+    1956,
+    "Interstate Highway Act",
+    "Suburbanization and mobility expand",
+    "Federal-Aid Highway Act of 1956",
+    "us",
+    5,
+    "州际公路法",
+    "州际公路法的背景与影响",
+    "u8"
+  ],
+  [
+    1957,
+    "Little Rock Nine",
+    "Federal enforcement of desegregation",
+    "Little Rock Nine",
+    "us",
+    3,
+    "小石城九人",
+    "小石城九人的背景与影响",
+    "u8"
+  ],
+  [
+    1960,
+    "Greensboro sit-ins begin",
+    "Student-led direct action grows",
+    "Greensboro sit-ins",
+    "us",
+    4,
+    "格林斯伯勒静坐抗议开始",
+    "格林斯伯勒静坐抗议开始的背景与影响",
+    "u8"
+  ],
+  [
+    1961,
+    "Freedom Rides",
+    "Challenge segregation in interstate travel",
+    "Freedom Riders",
+    "us",
+    3,
+    "自由乘车运动",
+    "自由乘车运动的背景与影响",
+    "u8"
+  ],
+  [
+    1962,
+    "Cuban Missile Crisis",
+    "Nuclear confrontation reaches a peak",
+    "Cuban Missile Crisis",
+    "us",
+    5,
+    "古巴导弹危机",
+    "古巴导弹危机的背景与影响",
+    "u8"
+  ],
+  [
+    1963,
+    "Kennedy assassination",
+    "National trauma and political transition",
+    "Assassination of John F. Kennedy",
+    "us",
+    3,
+    "肯尼迪遇刺",
+    "肯尼迪遇刺的背景与影响",
+    "u8"
+  ],
+  [
+    1963,
+    "March on Washington",
+    "Civil rights and jobs agenda unified",
+    "March on Washington for Jobs and Freedom",
+    "us",
+    3,
+    "向华盛顿进军",
+    "向华盛顿进军的背景与影响",
+    "u8"
+  ],
+  [
+    1964,
+    "Civil Rights Act",
+    "Major federal civil rights legislation",
+    "Civil Rights Act of 1964",
+    "us",
+    5,
+    "民权法",
+    "民权法的背景与影响",
+    "u8"
+  ],
+  [
+    1964,
+    "Great Society begins",
+    "Federal government takes on poverty and inequality",
+    "Great Society",
+    "us",
+    5,
+    "“伟大社会”计划启动",
+    "“伟大社会”计划启动的背景与影响",
+    "u8"
+  ],
+  [
+    1964,
+    "Gulf of Tonkin Resolution",
+    "Escalation in Vietnam",
+    "Gulf of Tonkin Resolution",
+    "us",
+    3,
+    "东京湾决议",
+    "东京湾决议的背景与影响",
+    "u8"
+  ],
+  [
+    1965,
+    "Voting Rights Act",
+    "Federal enforcement of Black voting rights",
+    "Voting Rights Act of 1965",
+    "us",
+    5,
+    "投票权法",
+    "投票权法的背景与影响",
+    "u8"
+  ],
+  [
+    1965,
+    "Immigration and Nationality Act enacted",
+    "New waves of migration follow policy change",
+    "Immigration and Nationality Act of 1965",
+    "us",
+    3,
+    "《移民与国籍法》颁布",
+    "《移民与国籍法》颁布的背景与影响",
+    "u8"
+  ],
+  [
+    1965,
+    "Medicare and Medicaid",
+    "Great Society health programs",
+    "Social Security Amendments of 1965",
+    "us",
+    3,
+    "医疗保险与医疗补助",
+    "医疗保险与医疗补助的背景与影响",
+    "u8"
+  ],
+  [
+    1965,
+    "Watts uprising",
+    "Urban unrest highlights racial inequality",
+    "Watts riots",
+    "us",
+    3,
+    "瓦茨起义",
+    "瓦茨起义的背景与影响",
+    "u8"
+  ],
+  [
+    1968,
+    "Fair Housing Act",
+    "Civil rights legislation for housing",
+    "Civil Rights Act of 1968",
+    "us",
+    5,
+    "公平住房法",
+    "公平住房法的背景与影响",
+    "u8"
+  ],
+  [
+    1968,
+    "MLK and RFK assassinations",
+    "Year of political crisis",
+    "1968 in the United States",
+    "us",
+    3,
+    "马丁·路德·金与罗伯特·肯尼迪遇刺",
+    "马丁·路德·金与罗伯特·肯尼迪遇刺的背景与影响",
+    "u8"
+  ],
+  [
+    1968,
+    "Tet Offensive",
+    "Turning point in the Vietnam War",
+    "Tet Offensive",
+    "us",
+    3,
+    "春节攻势",
+    "春节攻势的背景与影响",
+    "u8"
+  ],
+  [
+    1969,
+    "Apollo 11 moon landing",
+    "Science, prestige, and Cold War competition",
+    "Apollo 11",
+    "us",
+    3,
+    "阿波罗11号登月",
+    "阿波罗11号登月的背景与影响",
+    "u8"
+  ],
+  [
+    1970,
+    "Environmental Protection Agency created",
+    "Environmental politics gains federal force",
+    "United States Environmental Protection Agency",
+    "us",
+    3,
+    "环境保护署成立",
+    "环境保护署成立的背景与影响",
+    "u8"
+  ],
+  [
+    1971,
+    "Pentagon Papers",
+    "Public trust in government erodes",
+    "Pentagon Papers",
+    "us",
+    3,
+    "五角大楼文件",
+    "五角大楼文件的背景与影响",
+    "u8"
+  ],
+  [
+    1972,
+    "Watergate break-in",
+    "Scandal begins",
+    "Watergate scandal",
+    "us",
+    5,
+    "水门闯入事件",
+    "水门闯入事件的背景与影响",
+    "u8"
+  ],
+  [
+    1972,
+    "Title IX",
+    "Women gain equal access in education",
+    "Title IX",
+    "us",
+    3,
+    "第九条",
+    "第九条的背景与影响",
+    "u8"
+  ],
+  [
+    1973,
+    "Oil crisis begins",
+    "Energy shocks expose economic vulnerability",
+    "1973 oil crisis",
+    "us",
+    5,
+    "石油危机开始",
+    "石油危机开始的背景与影响",
+    "u8"
+  ],
+  [
+    1973,
+    "Roe v. Wade",
+    "Abortion rights become constitutional issue",
+    "Roe v. Wade",
+    "us",
+    5,
+    "罗诉韦德案",
+    "罗诉韦德案的背景与影响",
+    "u8"
+  ],
+  [
+    1974,
+    "Nixon resigns",
+    "Watergate reaches its climax",
+    "Resignation of Richard Nixon",
+    "us",
+    3,
+    "尼克松辞职",
+    "尼克松辞职的背景与影响",
+    "u8"
+  ],
+  [
+    1975,
+    "Fall of Saigon",
+    "Vietnam War ends",
+    "Fall of Saigon",
+    "us",
+    3,
+    "西贡陷落",
+    "西贡陷落的背景与影响",
+    "u8"
+  ],
+  [
+    1978,
+    "Camp David Accords",
+    "U.S. brokered peace in the Middle East",
+    "Camp David Accords",
+    "us",
+    3,
+    "戴维营协议",
+    "戴维营协议的背景与影响",
+    "u8"
+  ],
+  [
+    1978,
+    "Proposition 13",
+    "Tax revolt and conservative politics",
+    "1978 California Proposition 13",
+    "us",
+    3,
+    "13号提案",
+    "13号提案的背景与影响",
+    "u8"
+  ],
+  [
+    1978,
+    "Iranian Revolution begins",
+    "Hostage crisis and new Middle East tensions",
+    "Iranian Revolution",
+    "us",
+    5,
+    "伊朗革命开始",
+    "伊朗革命开始的背景与影响",
+    "u8"
+  ],
+  [
+    1979,
+    "Three Mile Island",
+    "Nuclear anxiety rises",
+    "Three Mile Island accident",
+    "us",
+    3,
+    "三哩岛事故",
+    "三哩岛事故的背景与影响",
+    "u8"
+  ],
+  [
+    1980,
+    "Deregulation and tax cuts",
+    "Market-oriented policy gains influence",
+    "Deregulation",
+    "us",
+    3,
+    "放松管制与减税",
+    "放松管制与减税的背景与影响",
+    "u9"
+  ],
+  [
+    1980,
+    "Reagan elected president",
+    "Conservative politics ascends",
+    "1980 United States presidential election",
+    "us",
+    3,
+    "里根当选总统",
+    "里根当选总统的背景与影响",
+    "u9"
+  ],
+  [
+    1981,
+    "PATCO strike",
+    "Reagan confronts organized labor",
+    "Professional Air Traffic Controllers Organization (1968)",
+    "us",
+    3,
+    "空管工会罢工",
+    "空管工会罢工的背景与影响",
+    "u9"
+  ],
+  [
+    1981,
+    "Reaganomics begins",
+    "Tax cuts and deregulation reshape policy",
+    "Reaganomics",
+    "us",
+    3,
+    "里根经济学开始实施",
+    "里根经济学开始实施的背景与影响",
+    "u9"
+  ],
+  [
+    1983,
+    "Strategic Defense Initiative",
+    "Cold War military pressure increases",
+    "Strategic Defense Initiative",
+    "us",
+    3,
+    "战略防御倡议",
+    "战略防御倡议的背景与影响",
+    "u9"
+  ],
+  [
+    1985,
+    "Iran-Contra affair begins",
+    "Executive power and secrecy under scrutiny",
+    "Iran–Contra affair",
+    "us",
+    3,
+    "伊朗门事件开始",
+    "伊朗门事件开始的背景与影响",
+    "u9"
+  ],
+  [
+    1989,
+    "Fall of the Berlin Wall",
+    "Cold War order collapses in Europe",
+    "Fall of the Berlin Wall",
+    "us",
+    3,
+    "柏林墙倒塌",
+    "柏林墙倒塌的背景与影响",
+    "u9"
+  ],
+  [
+    1990,
+    "Persian Gulf War begins",
+    "U.S. demonstrates post-Cold War force",
+    "Gulf War",
+    "us",
+    5,
+    "海湾战争开始",
+    "海湾战争开始的背景与影响",
+    "u9"
+  ],
+  [
+    1991,
+    "Soviet Union dissolves",
+    "Global superpower balance changes",
+    "Dissolution of the Soviet Union",
+    "us",
+    3,
+    "苏联解体",
+    "苏联解体的背景与影响",
+    "u9"
+  ],
+  [
+    1992,
+    "Los Angeles riots",
+    "Race, policing, and urban crisis",
+    "1992 Los Angeles riots",
+    "us",
+    3,
+    "洛杉矶骚乱",
+    "洛杉矶骚乱的背景与影响",
+    "u9"
+  ],
+  [
+    1994,
+    "NAFTA takes effect",
+    "Free trade deepens North American integration",
+    "North American Free Trade Agreement",
+    "us",
+    3,
+    "北美自由贸易协定生效",
+    "北美自由贸易协定生效的背景与影响",
+    "u9"
+  ],
+  [
+    1994,
+    "Republican Revolution",
+    "Congressional power shifts right",
+    "Republican Revolution",
+    "us",
+    5,
+    "共和党革命",
+    "共和党革命的背景与影响",
+    "u9"
+  ],
+  [
+    1995,
+    "Oklahoma City bombing",
+    "Domestic extremism shocks the nation",
+    "Oklahoma City bombing",
+    "us",
+    3,
+    "俄克拉荷马城爆炸案",
+    "俄克拉荷马城爆炸案的背景与影响",
+    "u9"
+  ],
+  [
+    1996,
+    "Defense of Marriage Act",
+    "Culture wars enter federal law",
+    "Defense of Marriage Act",
+    "us",
+    5,
+    "婚姻保护法",
+    "婚姻保护法的背景与影响",
+    "u9"
+  ],
+  [
+    1998,
+    "Clinton impeachment",
+    "Partisan conflict peaks",
+    "Impeachment of Bill Clinton",
+    "us",
+    3,
+    "克林顿弹劾案",
+    "克林顿弹劾案的背景与影响",
+    "u9"
+  ],
+  [
+    2000,
+    "Bush v. Gore",
+    "Contested election defines a new era",
+    "Bush v. Gore",
+    "us",
+    5,
+    "布什诉戈尔案",
+    "布什诉戈尔案的背景与影响",
+    "u9"
+  ],
+  [
+    2001,
+    "September 11 attacks",
+    "Terrorism reshapes U.S. priorities",
+    "September 11 attacks",
+    "us",
+    5,
+    "九一一袭击",
+    "九一一袭击的背景与影响",
+    "u9"
+  ],
+  [
+    2001,
+    "War in Afghanistan begins",
+    "War on Terror expands",
+    "War in Afghanistan (2001–2021)",
+    "us",
+    5,
+    "阿富汗战争开始",
+    "阿富汗战争开始的背景与影响",
+    "u9"
+  ],
+  [
+    2003,
+    "Iraq War begins",
+    "U.S. invasion shapes foreign policy debates",
+    "Iraq War",
+    "us",
+    5,
+    "伊拉克战争开始",
+    "伊拉克战争开始的背景与影响",
+    "u9"
+  ],
+  [
+    2005,
+    "Hurricane Katrina",
+    "Federal response comes under fire",
+    "Hurricane Katrina",
+    "us",
+    3,
+    "卡特里娜飓风",
+    "卡特里娜飓风的背景与影响",
+    "u9"
+  ],
+  [
+    2008,
+    "Financial crisis response",
+    "Government intervenes in the economy",
+    "Financial crisis of 2007–2008",
+    "us",
+    5,
+    "金融危机应对",
+    "金融危机应对的背景与影响",
+    "u9"
+  ],
+  [
+    2008,
+    "Barack Obama elected",
+    "Historic election and new coalition",
+    "2008 United States presidential election",
+    "us",
+    3,
+    "贝拉克·奥巴马当选",
+    "贝拉克·奥巴马当选的背景与影响",
+    "u9"
+  ],
+  [
+    2007,
+    "Great Recession begins",
+    "Financial crisis hits the economy",
+    "Great Recession",
+    "us",
+    3,
+    "大衰退开始",
+    "大衰退开始的背景与影响",
+    "u9"
+  ],
+  [
+    2010,
+    "Affordable Care Act",
+    "Major health care reform",
+    "Affordable Care Act",
+    "us",
+    5,
+    "平价医疗法案",
+    "平价医疗法案的背景与影响",
+    "u9"
+  ],
+  [
+    2010,
+    "Affordable Care Act implementation",
+    "Health policy becomes central",
+    "Affordable Care Act",
+    "us",
+    5,
+    "平价医疗法案实施",
+    "平价医疗法案实施的背景与影响",
+    "u9"
+  ],
+  [
+    2015,
+    "Obergefell v. Hodges",
+    "Same-sex marriage becomes legal nationwide",
+    "Obergefell v. Hodges",
+    "us",
+    5,
+    "奥贝格费尔诉霍奇斯案",
+    "奥贝格费尔诉霍奇斯案的背景与影响",
+    "u9"
+  ],
+  [
+    2016,
+    "Donald Trump elected",
+    "Populism and polarization intensify",
+    "2016 United States presidential election",
+    "us",
+    3,
+    "唐纳德·特朗普当选",
+    "唐纳德·特朗普当选的背景与影响",
+    "u9"
+  ],
+  [
+    2017,
+    "Charlottesville violence",
+    "Extremism and memory politics collide",
+    "Unite the Right rally",
+    "us",
+    3,
+    "夏洛茨维尔暴力事件",
+    "夏洛茨维尔暴力事件的背景与影响",
+    "u9"
+  ],
+  [
+    2020,
+    "Election of Joe Biden",
+    "Political division and pandemic recovery",
+    "2020 United States presidential election",
+    "us",
+    5,
+    "乔·拜登当选",
+    "乔·拜登当选的背景与影响",
+    "u9"
+  ],
+  [
+    2020,
+    "COVID-19 pandemic begins in the United States",
+    "Public health and federal response tested",
+    "COVID-19 pandemic in the United States",
+    "us",
+    3,
+    "COVID-19大流行在美国开始",
+    "COVID-19大流行在美国开始的背景与影响",
+    "u9"
+  ],
+  [
+    2020,
+    "George Floyd protests",
+    "Mass protest over racial justice",
+    "George Floyd protests",
+    "us",
+    3,
+    "乔治·弗洛伊德抗议",
+    "乔治·弗洛伊德抗议的背景与影响",
+    "u9"
+  ],
+  [
+    2021,
+    "January 6 Capitol attack",
+    "Democratic norms face direct challenge",
+    "January 6 United States Capitol attack",
+    "us",
+    5,
+    "1月6日国会山袭击",
+    "1月6日国会山袭击的背景与影响",
+    "u9"
+  ],
+  [
+    2022,
+    "Dobbs v. Jackson overturns Roe",
+    "Abortion rights landscape changes",
+    "Dobbs v. Jackson Women's Health Organization",
+    "us",
+    5,
+    "多布斯案推翻罗诉韦德案",
+    "多布斯案推翻罗诉韦德案的背景与影响",
+    "u9"
+  ],
+  [
+    2022,
+    "Inflation Reduction Act",
+    "Major climate and fiscal legislation",
+    "Inflation Reduction Act",
+    "us",
+    5,
+    "通胀削减法案",
+    "通胀削减法案的背景与影响",
+    "u9"
+  ],
+  [
+    2001,
+    "USA PATRIOT Act enacted",
+    "Expanded federal anti-terrorism powers after the September 11 attacks",
+    "Patriot Act",
+    "us",
+    5,
+    "《美国爱国者法案》颁布",
+    "9·11袭击后联邦反恐权力显著扩大",
+    "u9"
+  ]
+];
+
+const DIFF_CAPS = {
+  bronze:30, silver:60, gold:120, platinum:200, diamond:9999
+};
+const DIFF_LABEL = {
+  en:{bronze:'🥉 Bronze',silver:'🥈 Silver',gold:'🥇 Gold',platinum:'💎 Platinum',diamond:'💠 Diamond'},
+  zh:{bronze:'🥉 青铜',silver:'🥈 白银',gold:'🥇 黄金',platinum:'💎 铂金',diamond:'💠 钻石'}
+};
+const DIFF_DESC = {
+  en:{
+    bronze:'Top 30 most important events from selected filter',
+    silver:'Top 60 most important events',
+    gold:'Top 120 most important events',
+    platinum:'Top 200 events',
+    diamond:'All events in selected filter'
+  },
+  zh:{
+    bronze:'所选筛选中最重要的30个事件',
+    silver:'最重要的60个事件',
+    gold:'最重要的120个事件',
+    platinum:'最重要的200个事件',
+    diamond:'所选筛选中的全部事件'
+  }
+};
+
+const UNIT_NAMES = {
+  en:{
+    all:'All Units',
+    u1:'Unit 1 · 1491–1607',
+    u2:'Unit 2 · 1607–1754',
+    u3:'Unit 3 · 1754–1800',
+    u4:'Unit 4 · 1800–1848',
+    u5:'Unit 5 · 1844–1877',
+    u6:'Unit 6 · 1865–1898',
+    u7:'Unit 7 · 1890–1945',
+    u8:'Unit 8 · 1945–1980',
+    u9:'Unit 9 · 1980–Present'
+  },
+  zh:{
+    all:'全部单元',
+    u1:'第一单元 · 1491–1607',
+    u2:'第二单元 · 1607–1754',
+    u3:'第三单元 · 1754–1800',
+    u4:'第四单元 · 1800–1848',
+    u5:'第五单元 · 1844–1877',
+    u6:'第六单元 · 1865–1898',
+    u7:'第七单元 · 1890–1945',
+    u8:'第八单元 · 1945–1980',
+    u9:'第九单元 · 1980–至今'
+  }
+};
+
+const EVENTS = RAW.map(([year,title,hint,wiki,r,importance,zh_title,zh_hint,unit],id)=>({
+  id, year, title, hint, wiki,
+  regions: r.split(',').map(x=>x.trim()),
+  importance, zh_title, zh_hint, unit
+}));
+
+let currentLang='en', currentDiff='bronze', currentUnit='all';
+let deck=[], placed=[], score=0, streak=0, maxStreak=0, lives=3;
+let current=null, locked=false, gameHistory=[], resultRecorded=false;
+
+// ── SOUND ENGINE ──────────────────────────────────────
+const AC = window.AudioContext ? new AudioContext() : null;
+function playSound(type) {
+  if(!AC) return;
+  if(AC.state==='suspended') AC.resume();
+  const t=AC.currentTime, osc=AC.createOscillator(), gain=AC.createGain();
+  osc.connect(gain); gain.connect(AC.destination);
+  if(type==='correct'){
+    osc.type='sine';
+    osc.frequency.setValueAtTime(523,t); osc.frequency.setValueAtTime(659,t+0.1); osc.frequency.setValueAtTime(784,t+0.2);
+    gain.gain.setValueAtTime(0.18,t); gain.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+    osc.start(t); osc.stop(t+0.5);
+  } else if(type==='wrong'){
+    osc.type='sawtooth'; osc.frequency.setValueAtTime(220,t); osc.frequency.setValueAtTime(180,t+0.1);
+    gain.gain.setValueAtTime(0.12,t); gain.gain.exponentialRampToValueAtTime(0.001,t+0.35);
+    osc.start(t); osc.stop(t+0.35);
+  } else if(type==='tick'){
+    osc.type='sine'; osc.frequency.setValueAtTime(800,t);
+    gain.gain.setValueAtTime(0.06,t); gain.gain.exponentialRampToValueAtTime(0.001,t+0.05);
+    osc.start(t); osc.stop(t+0.05);
+  } else if(type==='start'){
+    [261,329,392,523].forEach((f,i)=>{
+      const o=AC.createOscillator(), g=AC.createGain();
+      o.connect(g); g.connect(AC.destination);
+      o.type='sine'; o.frequency.value=f;
+      g.gain.setValueAtTime(0.1,t+i*0.1); g.gain.exponentialRampToValueAtTime(0.001,t+i*0.1+0.3);
+      o.start(t+i*0.1); o.stop(t+i*0.1+0.3);
+    });
+  } else if(type==='gameover'){
+    [392,349,311,261].forEach((f,i)=>{
+      const o=AC.createOscillator(), g=AC.createGain();
+      o.connect(g); g.connect(AC.destination);
+      o.type='sine'; o.frequency.value=f;
+      g.gain.setValueAtTime(0.1,t+i*0.15); g.gain.exponentialRampToValueAtTime(0.001,t+i*0.15+0.4);
+      o.start(t+i*0.15); o.stop(t+i*0.15+0.4);
+    });
+  }
+}
+
+
+// ── BACKGROUND MUSIC ──────────────────────────────────
+const BG_MUSIC_DEFAULT_VOLUME = 0.28;
+function bgMusicStorageGet(key){ try{return localStorage.getItem(key);}catch(e){return null;} }
+function bgMusicStorageSet(key,value){ try{localStorage.setItem(key,value);}catch(e){} }
+let bgMusicEnabled = bgMusicStorageGet('histotrivia-bg-music-enabled') !== '0';
+let bgMusicVolume = Number(bgMusicStorageGet('histotrivia-bg-music-volume'));
+if(!Number.isFinite(bgMusicVolume)) bgMusicVolume = BG_MUSIC_DEFAULT_VOLUME;
+bgMusicVolume = Math.max(0, Math.min(1, bgMusicVolume));
+
+function getBgMusic(){
+  return document.getElementById('bg-music');
+}
+function syncBackgroundMusicUI(){
+  const zh = currentLang === 'zh';
+  const audio = getBgMusic();
+  const btn = document.getElementById('music-toggle');
+  const txt = document.getElementById('music-toggle-text');
+  const icon = document.getElementById('music-icon');
+  const slider = document.getElementById('music-volume');
+  const volLabel = document.getElementById('music-volume-label');
+  const control = document.getElementById('music-control');
+  if(audio) audio.volume = bgMusicVolume;
+  if(slider) slider.value = Math.round(bgMusicVolume * 100);
+  if(btn){
+    btn.classList.toggle('on', bgMusicEnabled);
+    btn.setAttribute('aria-pressed', bgMusicEnabled ? 'true' : 'false');
+    btn.title = zh ? (bgMusicEnabled ? '关闭背景音乐' : '开启背景音乐') :
+                     (bgMusicEnabled ? 'Turn background music off' : 'Turn background music on');
+  }
+  if(icon) icon.textContent = bgMusicEnabled ? '♫' : '🔇';
+  if(txt) txt.textContent = zh ? (bgMusicEnabled ? '音乐开' : '音乐关') :
+                                (bgMusicEnabled ? 'Music On' : 'Music Off');
+  if(volLabel) volLabel.textContent = zh ? '音量' : 'Volume';
+  if(slider) slider.setAttribute('aria-label', zh ? '背景音乐音量' : 'Background music volume');
+  if(control) control.setAttribute('aria-label', zh ? '背景音乐控制' : 'Background music controls');
+}
+async function ensureBackgroundMusicPlaying(){
+  const audio = getBgMusic();
+  if(!audio || !bgMusicEnabled) return;
+  audio.volume = bgMusicVolume;
+  try{
+    await audio.play();
+  }catch(err){
+    // Browsers may block playback until a user gesture. The Begin/Toggle buttons
+    // are user gestures, so a later interaction will retry automatically.
+    console.debug('Background music waiting for user interaction:', err);
+  }
+}
+function toggleBackgroundMusic(){
+  const audio = getBgMusic();
+  bgMusicEnabled = !bgMusicEnabled;
+  bgMusicStorageSet('histotrivia-bg-music-enabled', bgMusicEnabled ? '1' : '0');
+  syncBackgroundMusicUI();
+  if(!audio) return;
+  if(bgMusicEnabled){
+    ensureBackgroundMusicPlaying();
+  }else{
+    audio.pause();
+  }
+}
+function setBackgroundMusicVolume(value){
+  bgMusicVolume = Math.max(0, Math.min(1, Number(value) / 100));
+  bgMusicStorageSet('histotrivia-bg-music-volume', String(bgMusicVolume));
+  const audio = getBgMusic();
+  if(audio) audio.volume = bgMusicVolume;
+  syncBackgroundMusicUI();
+}
+
+
+// ── SETTERS ──────────────────────────────────────────
+function setLang(lang) {
+  currentLang=lang;
+  ['en','zh'].forEach(l=>document.getElementById('lang-'+l).classList.toggle('active',l===lang));
+  updateUI();
+  syncBackgroundMusicUI();
+}
+function setDiff(diff) {
+  currentDiff=diff;
+  ['bronze','silver','gold','platinum','diamond'].forEach(d=>
+    document.getElementById('diff-'+d).classList.toggle('active',d===diff));
+  updateUI();
+}
+function setUnit(u) {
+  currentUnit=u;
+  document.querySelectorAll('.filter-btn[data-unit]').forEach(b=>
+    b.classList.toggle('active',b.dataset.unit===u));
+  showStartScreen();
+}
+
+function showStartScreen() {
+  document.getElementById('startscreen').classList.remove('hide');
+  document.getElementById('gameover').classList.add('hide');
+  hideReview(); updateUI();
+}
+
+function getTitle(ev){return currentLang==='zh'?(ev.zh_title||ev.title):ev.title;}
+function getHint(ev) {return currentLang==='zh'?(ev.zh_hint||''):ev.hint;}
+
+// ── POOL BUILDING ──────────────────────────────────────
+function buildPool() {
+  const cap = DIFF_CAPS[currentDiff];
+  let pool = EVENTS.filter(ev => currentUnit==='all' || ev.unit===currentUnit);
+  pool.sort((a,b) => b.importance-a.importance || a.year-b.year);
+  return pool.slice(0, Math.min(cap, pool.length));
+}
+
+// ── UI TEXT ──────────────────────────────────────────
+function updateUI() {
+  const zh = currentLang==='zh';
+  const Q = id => document.getElementById(id);
+  if(Q('ss-sub'))     Q('ss-sub').textContent     = zh?'将AP美国史大事件按时间顺序排列':'Place AP U.S. History events in chronological order';
+  if(Q('ss-lang-lbl'))Q('ss-lang-lbl').textContent= '🌐 '+(zh?'语言':'Language / 语言');
+  if(Q('ss-diff-lbl'))Q('ss-diff-lbl').textContent= '⚔️ '+(zh?'难度——题库大小':'Difficulty — pool size');
+  if(Q('ss-begin'))   Q('ss-begin').textContent   = zh?'开始练习 ›':'Begin Practice ›';
+  if(Q('ss-count'))   Q('ss-count').textContent   = zh?`${buildPool().length}个事件，严格对应AP考纲`:`${buildPool().length} events aligned to the AP U.S. History CED`;
+  if(Q('diff-desc'))  Q('diff-desc').textContent  = DIFF_DESC[zh?'zh':'en'][currentDiff];
+  const dl = DIFF_LABEL[zh?'zh':'en'];
+  Object.keys(dl).forEach(d=>{const e=Q('diff-'+d);if(e)e.textContent=dl[d];});
+  const rules_en = [
+    '📜 A card appears — place it on the timeline',
+    '📍 Click <strong>+</strong> to insert between cards',
+    '✅ Correct: year revealed, Wikipedia link appears',
+    '❌ Wrong: lose a life (3 total)',
+    '📚 Filter by AP unit for targeted practice',
+    '🏛 Review your full timeline after the game'
+  ];
+  const rules_zh = [
+    '📜 出现一张事件卡片——放入时间轴',
+    '📍 点击 <strong>+</strong> 按钮插入',
+    '✅ 答对：显示年份和维基链接',
+    '❌ 答错：失去一条命（共三条）',
+    '📚 按AP单元筛选，针对性练习',
+    '🏛 游戏结束后回顾完整时间轴'
+  ];
+  const el=Q('ss-rules'); if(el) el.innerHTML=(zh?rules_zh:rules_en).map(r=>`<li>${r}</li>`).join('');
+  // Unit filter bar labels
+  const un=UNIT_NAMES[zh?'zh':'en'];
+  document.querySelectorAll('.filter-btn[data-unit]').forEach(b=>{
+    const u=b.dataset.unit;
+    b.textContent=un[u]||u;
+    b.classList.toggle('active',u===currentUnit);
+  });
+  // HUD labels
+  const hl=zh?{score:'得分',pool:'题库',streak:'连击',lives:'生命'}:{score:'Score',pool:'Pool',streak:'Streak',lives:'Lives'};
+  ['score','pool','streak','lives'].forEach(k=>{const e=Q('hud-'+k+'-lbl');if(e)e.textContent=hl[k];});
+  const cl=Q('challenge-label');
+  if(cl) cl.textContent=zh?'这个事件放在时间轴的什么位置？':'Where does this event belong on the timeline?';
+  const il=Q('instruction');
+  if(il) il.innerHTML=zh?'点击 <strong>+</strong> 按钮将事件插入时间轴':'Click the <strong>+</strong> button to insert this event';
+  if(current){
+    const ct=Q('card-title'); if(ct) ct.textContent=getTitle(current);
+    const ch=Q('card-hint'); if(ch) ch.textContent=getHint(current);
+  }
+  if(placed.length) renderTimeline();
+}
+
+// ── GAME LOOP ──────────────────────────────────────────
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startGame() {
+  ensureBackgroundMusicPlaying();
+  document.getElementById('startscreen').classList.add('hide');
+  document.getElementById('gameover').classList.add('hide');
+  hideReview();
+  const pool=buildPool();
+  deck=shuffle(pool);
+  placed=[];score=0;streak=0;maxStreak=0;lives=3;locked=false;gameHistory=[];resultRecorded=false;
+  updateHUD(); document.getElementById('pool-size').textContent=pool.length;
+  const first=deck.shift();
+  placed.push(first); gameHistory.push({event:first,wasCorrect:true,wasSeed:true});
+  renderTimeline(); nextCard(); updateUI(); playSound('start');
+}
+
+function fmtYear(y){
+  if(currentLang==='zh') return y<0?'公元前'+Math.abs(y)+'年':'公元'+y+'年';
+  return y<0?Math.abs(y)+' BCE':y+' CE';
+}
+
+function updateHUD(){
+  const zh=currentLang==='zh';
+  document.getElementById('score').textContent=score;
+  document.getElementById('streak').textContent=streak>=2?streak+'🔥':'—';
+  const h=document.getElementById('hearts'); h.innerHTML='';
+  for(let i=0;i<3;i++){
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 24'); svg.classList.add('heart');
+    if(i>=lives) svg.classList.add('lost');
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d','M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+    p.setAttribute('fill',i<lives?'#c44':'#aaa'); svg.appendChild(p); h.appendChild(svg);
+  }
+  document.getElementById('progress').style.width=Math.min(100,(score/30)*100)+'%';
+  const hl=zh?{score:'得分',pool:'题库',streak:'连击',lives:'生命'}:{score:'Score',pool:'Pool',streak:'Streak',lives:'Lives'};
+  ['score','pool','streak','lives'].forEach(k=>{const e=document.getElementById('hud-'+k+'-lbl');if(e)e.textContent=hl[k];});
+}
+
+
+const imgCache=new Map();
+async function fetchWikiImage(wiki){
+  if(imgCache.has(wiki)) return imgCache.get(wiki);
+  const title = wiki.replace(/_/g,' ');
+
+  // 1) Preferred source: English Wikipedia REST summary. This gives the same
+  // canonical page used by the Wikipedia link plus its lead thumbnail.
+  try{
+    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
+    const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    if(r.ok){
+      const d = await r.json();
+      const imgUrl = d?.thumbnail?.source || d?.originalimage?.source || null;
+      if(imgUrl){ imgCache.set(wiki, imgUrl); return imgUrl; }
+    }
+  }catch(err){
+    console.warn('Wikipedia summary image lookup failed for', wiki, err);
+  }
+
+  // 2) Fallback: MediaWiki pageimages API (handles redirects and pages whose
+  // REST summary does not expose a thumbnail).
+  try{
+    const api = new URL('https://en.wikipedia.org/w/api.php');
+    api.search = new URLSearchParams({
+      action:'query', format:'json', origin:'*', redirects:'1',
+      prop:'pageimages', piprop:'thumbnail', pithumbsize:'320', titles:title
+    });
+    const r = await fetch(api);
+    if(r.ok){
+      const d = await r.json();
+      const page = Object.values(d?.query?.pages || {})[0];
+      const imgUrl = page?.thumbnail?.source || null;
+      if(imgUrl){ imgCache.set(wiki, imgUrl); return imgUrl; }
+    }
+  }catch(err){
+    console.warn('Wikipedia pageimages lookup failed for', wiki, err);
+  }
+
+  // 3) Final fallback: search Wikimedia Commons for a directly related image.
+  // This keeps an event thumbnail available even when the article itself has
+  // no lead image.
+  try{
+    const api = new URL('https://commons.wikimedia.org/w/api.php');
+    api.search = new URLSearchParams({
+      action:'query', format:'json', origin:'*', generator:'search',
+      gsrsearch:title, gsrnamespace:'6', gsrlimit:'1',
+      prop:'imageinfo', iiprop:'url', iiurlwidth:'320'
+    });
+    const r = await fetch(api);
+    if(r.ok){
+      const d = await r.json();
+      const page = Object.values(d?.query?.pages || {})[0];
+      const ii = page?.imageinfo?.[0];
+      const imgUrl = ii?.thumburl || ii?.url || null;
+      if(imgUrl){ imgCache.set(wiki, imgUrl); return imgUrl; }
+    }
+  }catch(err){
+    console.warn('Commons image fallback failed for', wiki, err);
+  }
+
+  imgCache.set(wiki, null);
+  return null;
+}
+
+function attachImage(img, ph, url, displayMode='block'){
+  if(!img || !ph || !url) return;
+  img.classList.remove('loaded');
+  img.style.display = 'none';
+  ph.style.display = 'flex';
+
+  const finish = () => {
+    img.classList.add('loaded');
+    img.style.display = displayMode;
+    ph.style.display = 'none';
+  };
+
+  img.onload = finish;
+  img.onerror = () => {
+    ph.style.display = 'flex';
+    img.style.display = 'none';
+  };
+
+  // Assign src after handlers are attached, and handle cached images.
+  if(img.src !== url) img.src = url;
+
+  if(img.complete && img.naturalWidth > 0){
+    finish();
+  }
+}
+
+
+async function nextCard(){
+  if(deck.length===0||lives===0){endGame();return;}
+  current=deck.shift();
+  document.getElementById('card-title').textContent=getTitle(current);
+  document.getElementById('card-hint').textContent=getHint(current);
+  // Badge hidden on current card — keep the challenge focused on chronology
+  document.getElementById('card-region-badge').textContent='';
+  locked=false;
+  const img=document.getElementById('card-img'), ph=document.getElementById('card-img-ph');
+  img.classList.remove('loaded'); img.src=''; ph.style.display='flex';
+  fetchWikiImage(current.wiki).then(url=>{
+    if(url&&current){img.src=url;img.onload=()=>{img.classList.add('loaded');ph.style.display='none';};}
+  });
+  renderTimeline();
+}
+
+function renderTimeline(){
+  const tl=document.getElementById('timeline'); tl.innerHTML='<div class="timeline-line"></div>';
+  const sorted=[...placed].sort((a,b)=>a.year-b.year);
+  if(!sorted.length){if(current&&!locked)addInsertZone(tl,0,null,null);return;}
+  if(current&&!locked) addInsertZone(tl,0,null,sorted[0]);
+  sorted.forEach((ev,i)=>{
+    tl.appendChild(createTLCard(ev));
+    if(current&&!locked&&i<sorted.length-1) addInsertZone(tl,i+1,sorted[i],sorted[i+1]);
+  });
+  if(current&&!locked) addInsertZone(tl,sorted.length,sorted[sorted.length-1],null);
+}
+
+function createTLCard(ev){
+  const div=document.createElement('div'); div.className='tl-card';
+  div.innerHTML=`<div class="tl-thumb-ph" id="th-ph-${ev.id}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+    <img class="tl-thumb" id="th-${ev.id}" src="" alt="" style="display:none">
+    <div class="tl-body"><span class="tl-card-year">${fmtYear(ev.year)}</span><span class="tl-card-title">${getTitle(ev)}</span>
+    <a class="tl-card-wiki" href="https://en.wikipedia.org/wiki/${encodeURIComponent(ev.wiki)}" target="_blank" rel="noopener">Wikipedia ↗</a></div>`;
+  fetchWikiImage(ev.wiki).then(url=>{if(!url)return;const img=document.getElementById('th-'+ev.id),ph=document.getElementById('th-ph-'+ev.id);if(img&&ph){img.src=url;img.style.display='block';img.onload=()=>ph.style.display='none';}});
+  return div;
+}
+
+function addInsertZone(tl,idx,before,after){
+  const zone=document.createElement('div'); zone.className='insert-zone'+(locked?' disabled':'');
+  zone.innerHTML='<div class="insert-btn">+</div>';
+  zone.addEventListener('mouseenter',()=>{if(!locked)playSound('tick');});
+  zone.addEventListener('click',()=>attemptPlace(idx,before,after));
+  tl.appendChild(zone);
+}
+
+function attemptPlace(idx,before,after){
+  if(locked||!current)return; locked=true;
+  const y=current.year;
+  const minY=before?before.year:-Infinity, maxY=after?after.year:Infinity;
+  const correct=y>=minY&&y<=maxY;
+  gameHistory.push({event:current,wasCorrect:correct});
+  placed.push(current);
+  const sorted=[...placed].sort((a,b)=>a.year-b.year);
+  const tl=document.getElementById('timeline'); tl.innerHTML='<div class="timeline-line"></div>';
+  sorted.forEach(ev=>{const c=createTLCard(ev);if(ev===current)c.classList.add(correct?'correct':'wrong');tl.appendChild(c);});
+  if(correct){score++;streak++;maxStreak=Math.max(maxStreak,streak);playSound('correct');}else{lives--;streak=0;playSound('wrong');}
+  updateHUD();
+  const yStr=fmtYear(current.year); const zh=currentLang==='zh';
+  showFeedback(correct?'✓ '+(zh?'正确！'+yStr:'Correct! '+yStr):'✗ '+(zh?'应为'+yStr:'It was '+yStr),correct?'correct':'wrong');
+  setTimeout(()=>{hideFeedback();if(lives<=0||deck.length===0){endGame();return;}nextCard();},1700);
+}
+
+function showFeedback(msg,type){const f=document.getElementById('feedback');f.textContent=msg;f.className='feedback '+type;}
+function hideFeedback(){document.getElementById('feedback').className='feedback hide';}
+
+function endGame(){
+  current=null; playSound('gameover');
+  const zh=currentLang==='zh';
+  const msgs_en=[[0,"Keep reviewing — history takes practice!"],[5,"Good start — keep studying the CED"],[10,"Solid knowledge of AP U.S. History"],[20,"Impressive! You know this curriculum well"],[30,"Outstanding! AP 5 worthy historian"]];
+  const msgs_zh=[[0,"继续复习——历史需要反复练习！"],[5,"不错的开始——继续研读考纲！"],[10,"对AP美国史掌握扎实"],[20,"令人印象深刻！你非常熟悉这门课程"],[30,"出类拔萃！值得AP满分的历史学者"]];
+  const msgs=zh?msgs_zh:msgs_en;
+  let msg=msgs[0][1]; for(const[n,m]of msgs)if(score>=n)msg=m;
+  document.getElementById('final-score').textContent=score;
+  document.getElementById('final-msg').textContent=zh?msg+' — 成功放置'+score+'个事件':msg+' — '+score+' events placed correctly';
+  document.getElementById('go-title').textContent=zh?'练习完成':'Practice Complete';
+  document.getElementById('go-review').textContent=zh?'回顾时间轴 ›':'Review Timeline ›';
+  document.getElementById('go-analytics').textContent=zh?'查看学习数据':'Learning Analytics';
+  document.getElementById('go-again').textContent=zh?'再练一次':'Practice Again';
+  document.getElementById('gameover').classList.remove('hide');
+  recordTimelineResult();
+}
+
+function makeResultId(){
+  if(window.crypto&&typeof window.crypto.randomUUID==='function') return window.crypto.randomUUID();
+  return `timeline-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function recordTimelineResult(){
+  if(resultRecorded) return;
+  resultRecorded=true;
+  const attempts=gameHistory.filter(h=>!h.wasSeed).map(h=>({
+    eventId:h.event.id,
+    title:h.event.title,
+    titleZh:h.event.zh_title||h.event.title,
+    year:h.event.year,
+    unit:h.event.unit,
+    correct:h.wasCorrect
+  }));
+  const correct=attempts.filter(item=>item.correct).length;
+  const total=attempts.length;
+  const payload={
+    schemaVersion:1,
+    resultId:makeResultId(),
+    gameType:'timeline',
+    score,
+    correct,
+    total,
+    maxStreak,
+    unitFilter:currentUnit,
+    completedAt:new Date().toISOString(),
+    details:{
+      accuracy:total?Math.round(correct/total*100):0,
+      difficulty:currentDiff,
+      language:currentLang,
+      livesRemaining:lives,
+      poolSize:buildPool().length,
+      attempts
+    }
+  };
+  if(window.EPOCH_SITE_BRIDGE&&typeof window.EPOCH_SITE_BRIDGE.recordGameResult==='function'){
+    Promise.resolve(window.EPOCH_SITE_BRIDGE.recordGameResult(payload)).catch(()=>{});
+  }else if(window.parent&&window.parent!==window){
+    window.parent.postMessage({type:'epoch:game-result',payload},window.location.origin);
+  }
+}
+
+function openAnalytics(){
+  if(window.EPOCH_SITE_BRIDGE&&typeof window.EPOCH_SITE_BRIDGE.openAnalytics==='function'){
+    window.EPOCH_SITE_BRIDGE.openAnalytics('timeline');
+  }else if(window.parent&&window.parent!==window){
+    window.parent.postMessage({type:'epoch:open-analytics',gameType:'timeline'},window.location.origin);
+  }else{
+    window.location.href='/analytics?game=timeline';
+  }
+}
+
+function showReview(){
+  document.getElementById('gameover').classList.add('hide');
+  document.getElementById('review-screen').classList.add('show');
+  const zh=currentLang==='zh';
+  const attempts=gameHistory.filter(h=>!h.wasSeed);
+  const correct=attempts.filter(h=>h.wasCorrect).length;
+  document.getElementById('rev-title').textContent=zh?'你的时间轴':'Your Timeline';
+  document.getElementById('review-stats').textContent=zh?`${attempts.length}个事件中答对${correct}个`:`${correct} of ${attempts.length} events placed correctly`;
+  document.getElementById('rev-lbl1').textContent=zh?'你放置的事件——按顺序':'Events you placed — in order';
+  document.getElementById('rev-lbl2').textContent=zh?'所有放置事件——图集':'All placed events — gallery view';
+  document.getElementById('rev-again').textContent=zh?'再练一次 ›':'Practice Again ›';
+  document.getElementById('rev-back').textContent=zh?'返回结果':'Back to Results';
+  const tl=document.getElementById('review-tl'); tl.innerHTML='';
+  [...gameHistory].sort((a,b)=>a.event.year-b.event.year).forEach(h=>{
+    const c=document.createElement('div'); c.className='review-tl-card';
+    const un=UNIT_NAMES[zh?'zh':'en'];
+    c.innerHTML=`<div class="review-tl-dot ${h.wasCorrect?'ok':'bad'}"></div>
+      <div class="review-tl-img-ph" id="rtlph-${h.event.id}"></div>
+      <img class="review-tl-img" id="rtli-${h.event.id}" src="" alt="" style="display:none">
+      <span class="review-tl-year">${fmtYear(h.event.year)}</span>
+      <div class="review-tl-name">${getTitle(h.event)}</div>
+      <div style="font-size:.6rem;color:var(--ink3);margin-bottom:2px">${un[h.event.unit]||h.event.unit}</div>
+      <a class="review-tl-link" href="https://en.wikipedia.org/wiki/${encodeURIComponent(h.event.wiki)}" target="_blank">Wikipedia ↗</a>`;
+    tl.appendChild(c);
+    fetchWikiImage(h.event.wiki).then(url=>{if(!url)return;const img=document.getElementById('rtli-'+h.event.id),ph=document.getElementById('rtlph-'+h.event.id);if(img&&ph){img.src=url;img.onload=()=>{img.style.display='block';ph.style.display='none';};}});
+  });
+  const grid=document.getElementById('review-grid'); grid.innerHTML='';
+  [...gameHistory].sort((a,b)=>a.event.year-b.event.year).forEach(h=>{
+    const c=document.createElement('div'); c.className='review-card '+(h.wasCorrect?'correct-card':'wrong-card');
+    c.innerHTML=`<div class="review-card-ph" id="rph-${h.event.id}"></div><img id="ri-${h.event.id}" src="" alt="" style="width:100%;height:80px;object-fit:cover;display:none">
+      <div class="review-card-body"><span class="review-card-year">${fmtYear(h.event.year)}</span>
+      <div class="review-card-title">${getTitle(h.event)}</div>
+      <div style="font-size:.6rem;color:var(--ink3);font-style:italic;margin-bottom:2px">${getHint(h.event)}</div>
+      <a class="review-card-wiki" href="https://en.wikipedia.org/wiki/${encodeURIComponent(h.event.wiki)}" target="_blank">Wikipedia ↗</a></div>`;
+    grid.appendChild(c);
+    fetchWikiImage(h.event.wiki).then(url=>{if(!url)return;const img=document.getElementById('ri-'+h.event.id),ph=document.getElementById('rph-'+h.event.id);if(img&&ph){img.src=url;img.onload=()=>{img.style.display='block';ph.style.display='none';};}});
+  });
+}
+function hideReview(){document.getElementById('review-screen').classList.remove('show');}
+
+// Init
+updateUI(); syncBackgroundMusicUI(); showStartScreen();
+
+
+async function getWikipediaImage(title){
+  try{
+    const encoded = encodeURIComponent(title);
+    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encoded}`;
+    const res = await fetch(url, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    if(!res.ok) throw new Error('wiki fetch failed');
+    const data = await res.json();
+
+    if(data.thumbnail && data.thumbnail.source){
+      return data.thumbnail.source.replace(/\/\d+px-/,'/320px-');
+    }
+
+    if(data.originalimage && data.originalimage.source){
+      return data.originalimage.source;
+    }
+
+    return null;
+  }catch(err){
+    console.warn('Image load failed for', title, err);
+    return null;
+  }
+}
+
+</script>
+</body>
+</html>
