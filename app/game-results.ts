@@ -182,6 +182,16 @@ function readGuestResults(): unknown[] {
   }
 }
 
+function removeGuestResults(resultIds: Set<string>) {
+  if (!resultIds.size) return;
+  const remaining = readGuestResults().filter((row) => {
+    if (!row || typeof row !== "object" || !("resultId" in row)) return true;
+    return !resultIds.has(String((row as { resultId: unknown }).resultId));
+  });
+  window.localStorage.setItem(GAME_RESULTS_KEY, JSON.stringify(remaining));
+  window.dispatchEvent(new CustomEvent("epoch:results-updated"));
+}
+
 export function readCodenamesResults(): CodenamesResult[] {
   return readGuestResults().filter(isCodenamesResult).sort((a, b) =>
     b.completedAt.localeCompare(a.completedAt),
@@ -216,7 +226,10 @@ async function storeGameResult(value: CodenamesResult | TimelineResult | QuoteRe
       headers: { "content-type": "application/json" },
       body: JSON.stringify(value),
     });
-    if (response.ok) return true;
+    if (response.ok) {
+      removeGuestResults(new Set([value.resultId]));
+      return true;
+    }
   } catch {}
   try {
     const existing = readGuestResults();
@@ -234,6 +247,28 @@ async function storeGameResult(value: CodenamesResult | TimelineResult | QuoteRe
   } catch {
     return false;
   }
+}
+
+export async function syncGuestResultsToAccount(): Promise<number> {
+  const candidates = readGuestResults().flatMap((row): Array<CodenamesResult | TimelineResult | QuoteResult> => {
+    if (isCodenamesResult(row) || isQuoteResult(row)) return [row];
+    const timeline = normalizeTimelineResult(row);
+    return timeline ? [timeline] : [];
+  });
+  if (!candidates.length) return 0;
+  const savedIds = new Set<string>();
+  await Promise.all(candidates.map(async (value) => {
+    try {
+      const response = await fetch("/api/results", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(value),
+      });
+      if (response.ok) savedIds.add(value.resultId);
+    } catch {}
+  }));
+  removeGuestResults(savedIds);
+  return savedIds.size;
 }
 
 export async function storeCodenamesResult(value: unknown): Promise<boolean> {

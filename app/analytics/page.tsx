@@ -10,12 +10,19 @@ import {
   readCodenamesResults,
   readQuoteResults,
   readTimelineResults,
+  syncGuestResultsToAccount,
   type CodenamesResult,
   type QuoteResult,
   type TimelineResult,
 } from "../game-results";
 
 type AnalyticsGame = "codenames" | "timeline" | "quotes";
+
+function mergeResults<T extends { resultId: string; completedAt: string }>(accountRows: T[], guestRows: T[]) {
+  const merged = new Map<string, T>();
+  for (const row of [...accountRows, ...guestRows]) merged.set(row.resultId, row);
+  return [...merged.values()].sort((a, b) => b.completedAt.localeCompare(a.completedAt));
+}
 
 const MEDALS = [
   { key: "perfect", label: "完美通关" },
@@ -278,10 +285,14 @@ export default function AnalyticsPage() {
         const data = await response.json() as { results?: unknown[] };
         const results = data.results ?? [];
         usingAccount = true;
-        setCodenamesRows(results.filter(isCodenamesResult));
-        setTimelineRows(results.map(normalizeTimelineResult).filter((row): row is TimelineResult => row !== null));
-        setQuoteRows(results.filter(isQuoteResult));
+        const accountCodenames = results.filter(isCodenamesResult);
+        const accountTimeline = results.map(normalizeTimelineResult).filter((row): row is TimelineResult => row !== null);
+        const accountQuotes = results.filter(isQuoteResult);
+        setCodenamesRows(mergeResults(accountCodenames, readCodenamesResults()));
+        setTimelineRows(mergeResults(accountTimeline, readTimelineResults()));
+        setQuoteRows(mergeResults(accountQuotes, readQuoteResults()));
         setSource("account");
+        void syncGuestResultsToAccount();
       })
       .catch(refreshGuest);
     const refresh = () => { if (!usingAccount) refreshGuest(); };
